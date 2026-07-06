@@ -1,0 +1,727 @@
+// =============================================================================
+// StadiumIQ – Prisma Database Schema
+// PostgreSQL 16 | Prisma ORM
+// =============================================================================
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "relationJoins"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+enum UserRole {
+  fan
+  volunteer
+  venue_staff
+  security_officer
+  venue_manager
+  transport_coordinator
+  sustainability_officer
+  admin
+  super_admin
+}
+
+enum OccupancyLevel {
+  low
+  moderate
+  high
+  critical
+}
+
+enum GateStatus {
+  open
+  closed
+  limited
+  accessible_only
+}
+
+enum ZoneType {
+  entrance
+  seating
+  concourse
+  food_beverage
+  medical
+  security
+  accessible
+  vip
+  press
+  staff
+}
+
+enum IncidentType {
+  medical
+  security_threat
+  crowd_surge
+  fire
+  structural
+  lost_person
+  suspicious_package
+  vandalism
+  technical_failure
+  weather
+  other
+}
+
+enum IncidentStatus {
+  reported
+  acknowledged
+  responding
+  contained
+  resolved
+  closed
+}
+
+enum IncidentPriority {
+  low
+  medium
+  high
+  critical
+}
+
+enum TransportMode {
+  metro
+  bus
+  shuttle
+  taxi
+  bike
+  walk
+}
+
+enum VolunteerStatus {
+  available
+  assigned
+  on_break
+  off_duty
+}
+
+enum TaskStatus {
+  pending
+  in_progress
+  completed
+  cancelled
+}
+
+enum TaskPriority {
+  low
+  medium
+  high
+  urgent
+}
+
+enum AiAgentType {
+  stadium_assistant
+  crowd_predictor
+  emergency_guide
+  volunteer_briefer
+  security_analyst
+  accessibility_concierge
+  transport_advisor
+  sustainability_advisor
+}
+
+enum AiRole {
+  user
+  assistant
+  system
+}
+
+enum SecurityAlertLevel {
+  green
+  amber
+  red
+  black
+}
+
+enum WasteCategory {
+  recycling
+  compost
+  landfill
+  hazardous
+}
+
+// =============================================================================
+// USER & AUTH
+// =============================================================================
+
+model User {
+  id                String    @id @default(uuid()) @db.Uuid
+  email             String    @unique @db.VarChar(255)
+  passwordHash      String?   @db.VarChar(255)
+  displayName       String    @db.VarChar(100)
+  avatarUrl         String?   @db.VarChar(500)
+  role              UserRole  @default(fan)
+  preferredLanguage String    @default("en") @db.VarChar(10)
+  accessibilityMode String    @default("standard") @db.VarChar(50)
+  isActive          Boolean   @default(true)
+  isEmailVerified   Boolean   @default(false)
+  lastLoginAt       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  // Relations
+  refreshTokens     RefreshToken[]
+  auditLogs         AuditLog[]
+  volunteerProfile  VolunteerProfile?
+  conversations     AiConversation[]
+  reportedIncidents Incident[]       @relation("ReportedBy")
+  notifications     FanNotification[]
+  fanPreferences    FanPreferences?
+
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  tokenHash String   @unique @db.VarChar(255)
+  expiresAt DateTime
+  isRevoked Boolean  @default(false)
+  createdAt DateTime @default(now())
+  userAgent String?  @db.VarChar(500)
+  ipAddress String?  @db.VarChar(45)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@map("refresh_tokens")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String?  @db.Uuid
+  action     String   @db.VarChar(100)
+  resource   String   @db.VarChar(100)
+  resourceId String?  @db.VarChar(100)
+  details    Json?
+  ipAddress  String?  @db.VarChar(45)
+  userAgent  String?  @db.VarChar(500)
+  success    Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// =============================================================================
+// STADIUM & VENUE
+// =============================================================================
+
+model Stadium {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String   @db.VarChar(200)
+  city         String   @db.VarChar(100)
+  country      String   @db.VarChar(100)
+  capacity     Int
+  latitude     Float
+  longitude    Float
+  timezone     String   @db.VarChar(50)
+  floorCount   Int      @default(1)
+  mapImageUrl  String?  @db.VarChar(500)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  zones               StadiumZone[]
+  gates               StadiumGate[]
+  occupancySnapshots  OccupancySnapshot[]
+  incidents           Incident[]
+  crowdAlerts         CrowdAlert[]
+  matches             Match[]
+  volunteerProfiles   VolunteerProfile[]
+  transportStops      TransportStop[]
+  energyReadings      EnergyReading[]
+  wasteEvents         WasteEvent[]
+  conversations       AiConversation[]
+  securityAlerts      SecurityAlert[]
+  waypoints           Waypoint[]
+
+  @@index([isActive])
+  @@map("stadiums")
+}
+
+model StadiumZone {
+  id               String     @id @default(uuid()) @db.Uuid
+  stadiumId        String     @db.Uuid
+  name             String     @db.VarChar(100)
+  type             ZoneType
+  floor            Int        @default(0)
+  capacity         Int
+  currentOccupancy Int        @default(0)
+  occupancyLevel   OccupancyLevel @default(low)
+  isAccessible     Boolean    @default(false)
+  boundaryPolygon  Json
+  centroidLat      Float
+  centroidLng      Float
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  stadium            Stadium           @relation(fields: [stadiumId], references: [id], onDelete: Cascade)
+  crowdAlerts        CrowdAlert[]
+  incidents          Incident[]
+  volunteerTasks     VolunteerTask[]
+  securityAlerts     SecurityAlert[]
+  densityReadings    CrowdDensityReading[]
+
+  @@index([stadiumId])
+  @@index([occupancyLevel])
+  @@map("stadium_zones")
+}
+
+model StadiumGate {
+  id                     String     @id @default(uuid()) @db.Uuid
+  stadiumId              String     @db.Uuid
+  name                   String     @db.VarChar(100)
+  number                 String     @db.VarChar(10)
+  status                 GateStatus @default(open)
+  latitude               Float
+  longitude              Float
+  isAccessible           Boolean    @default(false)
+  queueLength            Int        @default(0)
+  estimatedWaitMinutes   Int        @default(0)
+  assignedZones          String[]
+  createdAt              DateTime   @default(now())
+  updatedAt              DateTime   @updatedAt
+
+  stadium Stadium @relation(fields: [stadiumId], references: [id], onDelete: Cascade)
+
+  @@index([stadiumId])
+  @@index([status])
+  @@map("stadium_gates")
+}
+
+model OccupancySnapshot {
+  id                String   @id @default(uuid()) @db.Uuid
+  stadiumId         String   @db.Uuid
+  timestamp         DateTime @default(now())
+  totalOccupancy    Int
+  occupancyPercent  Float
+  zoneBreakdown     Json
+  crowdFlowRate     Float    @default(0)
+
+  stadium Stadium @relation(fields: [stadiumId], references: [id], onDelete: Cascade)
+
+  @@index([stadiumId, timestamp])
+  @@index([timestamp])
+  @@map("occupancy_snapshots")
+}
+
+model CrowdDensityReading {
+  id                  String   @id @default(uuid()) @db.Uuid
+  zoneId              String   @db.Uuid
+  timestamp           DateTime @default(now())
+  densityPerSqMeter   Float
+  occupancyLevel      OccupancyLevel
+  movementVelocity    Float    @default(0)
+  flowDirection       Float    @default(0)
+
+  zone StadiumZone @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+
+  @@index([zoneId, timestamp])
+  @@map("crowd_density_readings")
+}
+
+model CrowdAlert {
+  id                      String              @id @default(uuid()) @db.Uuid
+  stadiumId               String              @db.Uuid
+  zoneId                  String              @db.Uuid
+  type                    String              @db.VarChar(50)
+  severity                String              @db.VarChar(20)
+  message                 String
+  aiSummary               String
+  locationLat             Float
+  locationLng             Float
+  estimatedAffectedPeople Int                 @default(0)
+  recommendedAction       String
+  isActive                Boolean             @default(true)
+  createdAt               DateTime            @default(now())
+  resolvedAt              DateTime?
+
+  stadium Stadium     @relation(fields: [stadiumId], references: [id])
+  zone    StadiumZone @relation(fields: [zoneId], references: [id])
+
+  @@index([stadiumId, isActive])
+  @@index([createdAt])
+  @@map("crowd_alerts")
+}
+
+// =============================================================================
+// NAVIGATION
+// =============================================================================
+
+model Waypoint {
+  id          String   @id @default(uuid()) @db.Uuid
+  stadiumId   String   @db.Uuid
+  name        String   @db.VarChar(200)
+  type        String   @db.VarChar(50)
+  latitude    Float
+  longitude   Float
+  floor       Int      @default(0)
+  isAccessible Boolean @default(false)
+  amenities   String[]
+  createdAt   DateTime @default(now())
+
+  stadium Stadium @relation(fields: [stadiumId], references: [id], onDelete: Cascade)
+
+  @@index([stadiumId])
+  @@index([type])
+  @@map("waypoints")
+}
+
+// =============================================================================
+// INCIDENTS
+// =============================================================================
+
+model Incident {
+  id              String           @id @default(uuid()) @db.Uuid
+  stadiumId       String           @db.Uuid
+  zoneId          String?          @db.Uuid
+  type            IncidentType
+  status          IncidentStatus   @default(reported)
+  priority        IncidentPriority
+  title           String           @db.VarChar(200)
+  description     String
+  locationLat     Float
+  locationLng     Float
+  floor           Int?
+  reportedById    String           @db.Uuid
+  assignedTo      String[]         @db.Uuid
+  aiSummary       String?
+  aiRecommendations String[]
+  resolvedAt      DateTime?
+  closedAt        DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  createdBy       String           @db.Uuid
+  updatedBy       String?          @db.Uuid
+
+  stadium  Stadium       @relation(fields: [stadiumId], references: [id])
+  zone     StadiumZone?  @relation(fields: [zoneId], references: [id])
+  reporter User          @relation("ReportedBy", fields: [reportedById], references: [id])
+  updates  IncidentUpdate[]
+
+  @@index([stadiumId, status])
+  @@index([priority])
+  @@index([createdAt])
+  @@map("incidents")
+}
+
+model IncidentUpdate {
+  id         String         @id @default(uuid()) @db.Uuid
+  incidentId String         @db.Uuid
+  updatedBy  String         @db.Uuid
+  status     IncidentStatus
+  note       String
+  timestamp  DateTime       @default(now())
+
+  incident Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  @@index([incidentId])
+  @@map("incident_updates")
+}
+
+// =============================================================================
+// TRANSPORT
+// =============================================================================
+
+model TransportStop {
+  id                     String        @id @default(uuid()) @db.Uuid
+  stadiumId              String        @db.Uuid
+  name                   String        @db.VarChar(200)
+  mode                   TransportMode
+  latitude               Float
+  longitude              Float
+  isAccessible           Boolean       @default(false)
+  stadiumGateId          String?       @db.Uuid
+  distanceFromGateMeters Int?
+  createdAt              DateTime      @default(now())
+
+  stadium      Stadium         @relation(fields: [stadiumId], references: [id])
+  departures   TransportDeparture[]
+
+  @@index([stadiumId])
+  @@map("transport_stops")
+}
+
+model TransportDeparture {
+  id                   String        @id @default(uuid()) @db.Uuid
+  stopId               String        @db.Uuid
+  lineName             String        @db.VarChar(100)
+  mode                 TransportMode
+  destination          String        @db.VarChar(200)
+  scheduledDeparture   DateTime
+  estimatedDeparture   DateTime
+  status               String        @db.VarChar(30)
+  platform             String?       @db.VarChar(20)
+  crowdLevel           String        @db.VarChar(20)
+  accessibleVehicle    Boolean       @default(false)
+  createdAt            DateTime      @default(now())
+
+  stop TransportStop @relation(fields: [stopId], references: [id])
+
+  @@index([stopId, scheduledDeparture])
+  @@map("transport_departures")
+}
+
+// =============================================================================
+// VOLUNTEERS
+// =============================================================================
+
+model VolunteerProfile {
+  id             String          @id @default(uuid()) @db.Uuid
+  userId         String          @unique @db.Uuid
+  stadiumId      String          @db.Uuid
+  badgeNumber    String          @unique @db.VarChar(20)
+  currentStatus  VolunteerStatus @default(available)
+  currentLat     Float?
+  currentLng     Float?
+  assignedZone   String?         @db.VarChar(100)
+  languages      String[]
+  skills         String[]
+  shiftStart     DateTime
+  shiftEnd       DateTime
+  tasksCompleted Int             @default(0)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  user    User         @relation(fields: [userId], references: [id])
+  stadium Stadium      @relation(fields: [stadiumId], references: [id])
+  tasks   VolunteerTask[]
+
+  @@index([stadiumId, currentStatus])
+  @@map("volunteer_profiles")
+}
+
+model VolunteerTask {
+  id                       String       @id @default(uuid()) @db.Uuid
+  volunteerId              String       @db.Uuid
+  stadiumId                String       @db.Uuid
+  title                    String       @db.VarChar(200)
+  description              String
+  priority                 TaskPriority @default(medium)
+  status                   TaskStatus   @default(pending)
+  locationLat              Float
+  locationLng              Float
+  zoneId                   String?      @db.Uuid
+  estimatedDurationMinutes Int          @default(30)
+  dueBy                    DateTime?
+  aiInstructions           String?
+  completedAt              DateTime?
+  createdAt                DateTime     @default(now())
+  updatedAt                DateTime     @updatedAt
+
+  volunteer VolunteerProfile @relation(fields: [volunteerId], references: [id])
+  zone      StadiumZone?     @relation(fields: [zoneId], references: [id])
+
+  @@index([volunteerId, status])
+  @@index([stadiumId, priority])
+  @@map("volunteer_tasks")
+}
+
+// =============================================================================
+// AI / GENAI
+// =============================================================================
+
+model AiConversation {
+  id         String       @id @default(uuid()) @db.Uuid
+  userId     String       @db.Uuid
+  stadiumId  String?      @db.Uuid
+  agentType  AiAgentType
+  language   String       @default("en") @db.VarChar(10)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  user     User       @relation(fields: [userId], references: [id])
+  stadium  Stadium?   @relation(fields: [stadiumId], references: [id])
+  messages AiMessage[]
+
+  @@index([userId])
+  @@index([stadiumId])
+  @@map("ai_conversations")
+}
+
+model AiMessage {
+  id             String   @id @default(uuid()) @db.Uuid
+  conversationId String   @db.Uuid
+  role           AiRole
+  content        String
+  tokensUsed     Int?
+  timestamp      DateTime @default(now())
+
+  conversation AiConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, timestamp])
+  @@map("ai_messages")
+}
+
+model PromptLog {
+  id               String   @id @default(uuid()) @db.Uuid
+  userId           String?  @db.Uuid
+  agentType        String   @db.VarChar(50)
+  rawPrompt        String
+  sanitizedPrompt  String?
+  wasAllowed       Boolean
+  rejectionReason  String?
+  hadInjection     Boolean  @default(false)
+  ipAddress        String?  @db.VarChar(45)
+  tokensUsed       Int?
+  latencyMs        Int?
+  createdAt        DateTime @default(now())
+
+  @@index([userId])
+  @@index([wasAllowed])
+  @@index([createdAt])
+  @@map("prompt_logs")
+}
+
+model KnowledgeDocument {
+  id         String   @id @default(uuid()) @db.Uuid
+  title      String   @db.VarChar(300)
+  content    String
+  source     String   @db.VarChar(200)
+  category   String   @db.VarChar(100)
+  language   String   @default("en") @db.VarChar(10)
+  vectorId   String?  @db.VarChar(100)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([category])
+  @@index([language])
+  @@map("knowledge_documents")
+}
+
+// =============================================================================
+// SUSTAINABILITY
+// =============================================================================
+
+model EnergyReading {
+  id               String   @id @default(uuid()) @db.Uuid
+  stadiumId        String   @db.Uuid
+  timestamp        DateTime @default(now())
+  source           String   @db.VarChar(30)
+  consumptionKwh   Float
+  productionKwh    Float?
+  carbonKg         Float
+  zone             String   @db.VarChar(100)
+
+  stadium Stadium @relation(fields: [stadiumId], references: [id])
+
+  @@index([stadiumId, timestamp])
+  @@map("energy_readings")
+}
+
+model WasteEvent {
+  id                String        @id @default(uuid()) @db.Uuid
+  stadiumId         String        @db.Uuid
+  timestamp         DateTime      @default(now())
+  category          WasteCategory
+  weightKg          Float
+  zone              String        @db.VarChar(100)
+  recyclablePercent Float         @default(0)
+
+  stadium Stadium @relation(fields: [stadiumId], references: [id])
+
+  @@index([stadiumId, timestamp])
+  @@map("waste_events")
+}
+
+// =============================================================================
+// SECURITY
+// =============================================================================
+
+model SecurityAlert {
+  id              String             @id @default(uuid()) @db.Uuid
+  stadiumId       String             @db.Uuid
+  zoneId          String?            @db.Uuid
+  type            String             @db.VarChar(50)
+  level           SecurityAlertLevel @default(green)
+  description     String
+  aiAnalysis      String
+  locationLat     Float
+  locationLng     Float
+  isActive        Boolean            @default(true)
+  detectedAt      DateTime           @default(now())
+  acknowledgedAt  DateTime?
+  acknowledgedBy  String?            @db.Uuid
+  resolvedAt      DateTime?
+
+  stadium Stadium      @relation(fields: [stadiumId], references: [id])
+  zone    StadiumZone? @relation(fields: [zoneId], references: [id])
+
+  @@index([stadiumId, isActive])
+  @@index([level])
+  @@map("security_alerts")
+}
+
+// =============================================================================
+// MATCHES
+// =============================================================================
+
+model Match {
+  id           String   @id @default(uuid()) @db.Uuid
+  stadiumId    String   @db.Uuid
+  homeTeam     String   @db.VarChar(100)
+  awayTeam     String   @db.VarChar(100)
+  kickoffTime  DateTime
+  gatesOpenTime DateTime
+  stage        String   @db.VarChar(50)
+  group        String?  @db.VarChar(10)
+  attendance   Int?
+  createdAt    DateTime @default(now())
+
+  stadium Stadium @relation(fields: [stadiumId], references: [id])
+
+  @@index([stadiumId, kickoffTime])
+  @@map("matches")
+}
+
+// =============================================================================
+// FAN
+// =============================================================================
+
+model FanPreferences {
+  id                      String   @id @default(uuid()) @db.Uuid
+  userId                  String   @unique @db.Uuid
+  enablePushNotifications Boolean  @default(true)
+  enableLocationTracking  Boolean  @default(false)
+  preferredRouteType      String   @default("standard") @db.VarChar(30)
+  dietaryPreferences      String[]
+  savedLocations          Json     @default("[]")
+  updatedAt               DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("fan_preferences")
+}
+
+model FanNotification {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  title     String   @db.VarChar(200)
+  body      String
+  type      String   @db.VarChar(30)
+  data      Json?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([createdAt])
+  @@map("fan_notifications")
+}

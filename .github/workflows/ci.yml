@@ -1,0 +1,335 @@
+name: 🏟️ StadiumIQ CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PYTHON_VERSION: '3.12'
+
+jobs:
+  # ===========================================================================
+  # Lint & Type Check
+  # ===========================================================================
+  lint:
+    name: 🔍 Lint & Type Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint (TypeScript)
+        run: npm run lint
+
+      - name: Type check
+        run: npm run type-check
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Python deps
+        run: |
+          cd apps/ai-service
+          pip install ruff mypy -r requirements.txt
+
+      - name: Lint Python (ruff)
+        run: cd apps/ai-service && ruff check src/ tests/
+
+      - name: Type check Python (mypy)
+        run: cd apps/ai-service && mypy src/ --ignore-missing-imports
+
+  # ===========================================================================
+  # Security Scan
+  # ===========================================================================
+  security:
+    name: 🔐 Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      security-events: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: CodeQL Analysis
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript, python
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+      - name: Audit npm dependencies
+        run: npm audit --audit-level=high
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Python security scan (bandit)
+        run: |
+          pip install bandit
+          cd apps/ai-service
+          bandit -r src/ -ll -x tests/
+
+  # ===========================================================================
+  # API Unit Tests
+  # ===========================================================================
+  test-api:
+    name: 🧪 API Tests (NestJS)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: stadiumiq
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: stadiumiq_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: cd apps/api && npx prisma generate
+        env:
+          DATABASE_URL: postgresql://stadiumiq:test_password@localhost:5432/stadiumiq_test
+
+      - name: Run database migrations
+        run: cd apps/api && npx prisma migrate deploy
+        env:
+          DATABASE_URL: postgresql://stadiumiq:test_password@localhost:5432/stadiumiq_test
+
+      - name: Run unit tests
+        run: cd apps/api && npm test -- --coverage --forceExit
+        env:
+          NODE_ENV: test
+          DATABASE_URL: postgresql://stadiumiq:test_password@localhost:5432/stadiumiq_test
+          REDIS_URL: redis://localhost:6379
+          JWT_ACCESS_SECRET: test_jwt_secret_min_64_chars_long_for_testing_purposes_only_not_prod
+          JWT_REFRESH_SECRET: test_jwt_refresh_secret_min_64_chars_long_for_testing_purposes_only
+          GEMINI_API_KEY: test_gemini_key
+          AI_SERVICE_URL: http://localhost:8000
+          AI_SERVICE_API_KEY: test_ai_key
+          QDRANT_URL: http://localhost:6333
+          QDRANT_API_KEY: test_qdrant_key
+          FRONTEND_URL: http://localhost:3000
+          ENCRYPTION_KEY: test_encryption_key_32_characters_x
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          directory: apps/api/coverage
+          flags: api
+
+  # ===========================================================================
+  # AI Service Tests (Python)
+  # ===========================================================================
+  test-ai:
+    name: 🤖 AI Service Tests (Python)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          cd apps/ai-service
+          pip install --no-cache-dir -r requirements.txt
+          pip install pytest pytest-asyncio pytest-cov httpx
+
+      - name: Run tests
+        run: |
+          cd apps/ai-service
+          pytest tests/ -v --cov=src --cov-report=xml
+        env:
+          AI_SERVICE_API_KEY: test-secret-key-12345
+          GEMINI_API_KEY: test_gemini_key
+          QDRANT_URL: http://localhost:6333
+          QDRANT_API_KEY: test_qdrant_key
+          DATABASE_URL: postgresql://test:test@localhost/test
+          REDIS_URL: redis://localhost:6379
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          directory: apps/ai-service
+          flags: ai-service
+
+  # ===========================================================================
+  # Frontend Tests
+  # ===========================================================================
+  test-web:
+    name: 🌐 Frontend Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: cd apps/web && npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3001/api
+          NEXT_PUBLIC_MAPBOX_TOKEN: pk.test_token
+
+      - name: Run unit/integration tests
+        run: cd apps/web && npm run test:coverage
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3001/api
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          directory: apps/web/coverage
+          flags: web
+
+  # ===========================================================================
+  # E2E Tests (Playwright)
+  # ===========================================================================
+  test-e2e:
+    name: 🎭 E2E & Accessibility Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [test-web]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: cd apps/web && npx playwright install --with-deps chromium
+
+      - name: Build frontend
+        run: cd apps/web && npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3001/api
+          NEXT_PUBLIC_MAPBOX_TOKEN: pk.test_token
+
+      - name: Run E2E tests
+        run: cd apps/web && npm run test:e2e
+        env:
+          BASE_URL: http://localhost:3000
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report/
+          retention-days: 7
+
+  # ===========================================================================
+  # Docker Build Validation
+  # ===========================================================================
+  docker-build:
+    name: 🐳 Docker Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [lint, security]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build API image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: infra/docker/Dockerfile.api
+          target: builder
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build AI Service image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: infra/docker/Dockerfile.ai
+          target: production
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build Web image
+        uses: docker/build-push-action@v6
+        with:
+          context: apps/web
+          file: infra/docker/Dockerfile.web
+          target: builder
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ===========================================================================
+  # Summary Gate
+  # ===========================================================================
+  ci-gate:
+    name: ✅ CI Gate
+    runs-on: ubuntu-latest
+    needs: [lint, security, test-api, test-ai, test-web, test-e2e, docker-build]
+    steps:
+      - name: All checks passed
+        run: echo "🏟️ StadiumIQ CI pipeline passed successfully!"

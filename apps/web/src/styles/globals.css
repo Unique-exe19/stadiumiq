@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =============================================================================
+   CSS Custom Properties – Light Theme Design Tokens
+   ============================================================================= */
+@layer base {
+  :root {
+    /* Light Theme (default) */
+    --background: 220 30% 97%;
+    --foreground: 220 30% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 30% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 30% 10%;
+    --primary: 220 75% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 15% 92%;
+    --secondary-foreground: 220 30% 15%;
+    --muted: 220 15% 93%;
+    --muted-foreground: 220 15% 42%;
+    --accent: 38 90% 48%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 15% 86%;
+    --input: 220 15% 90%;
+    --ring: 220 75% 45%;
+    --radius: 0.75rem;
+
+    /* Crowd status colors */
+    --crowd-low: 142 72% 35%;
+    --crowd-moderate: 38 92% 45%;
+    --crowd-high: 30 90% 50%;
+    --crowd-critical: 0 84% 55%;
+
+    /* Security level colors */
+    --security-green: 142 72% 35%;
+    --security-amber: 38 92% 45%;
+    --security-red: 0 84% 55%;
+    --security-black: 0 0% 8%;
+  }
+
+  /* High Contrast Mode */
+  @media (forced-colors: active) {
+    :root {
+      --primary: ButtonText;
+      --background: Canvas;
+      --foreground: CanvasText;
+    }
+  }
+
+  /* Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    min-height: 100dvh;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Focus indicators – WCAG 2.2 AA */
+  :focus-visible {
+    outline: 3px solid hsl(var(--primary));
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Skip navigation link */
+  .skip-link {
+    @apply sr-only focus:not-sr-only;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 9999;
+    padding: 0.75rem 1.5rem;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+}
+
+/* =============================================================================
+   Component Utilities
+   ============================================================================= */
+@layer components {
+  /* Premium light glassmorphism card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(220, 225, 240, 0.6);
+    box-shadow: 0 4px 24px rgba(30, 60, 140, 0.07), 0 1px 0 rgba(255,255,255,0.9) inset;
+  }
+
+  /* Gradient border card */
+  .gradient-border {
+    position: relative;
+    background: hsl(var(--card));
+    border-radius: var(--radius);
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: calc(var(--radius) + 1px);
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.3), hsl(var(--accent) / 0.2), transparent);
+    z-index: -1;
+  }
+
+  /* Status badges */
+  .status-low { @apply bg-green-50 text-green-700 border border-green-200; }
+  .status-moderate { @apply bg-amber-50 text-amber-700 border border-amber-200; }
+  .status-high { @apply bg-orange-50 text-orange-700 border border-orange-200; }
+  .status-critical { @apply bg-red-50 text-red-700 border border-red-200 animate-pulse; }
+
+  /* Security level badges */
+  .security-green { @apply bg-green-50 text-green-700 border border-green-200; }
+  .security-amber { @apply bg-amber-50 text-amber-700 border border-amber-200; }
+  .security-red { @apply bg-red-50 text-red-700 border border-red-200; }
+  .security-black { @apply bg-slate-900 text-slate-100 border border-slate-700; }
+
+  /* AI chat bubble */
+  .chat-bubble-user {
+    @apply rounded-2xl rounded-br-sm;
+    background: hsl(220 75% 45% / 0.1);
+    border: 1px solid hsl(220 75% 45% / 0.2);
+  }
+  .chat-bubble-ai {
+    @apply bg-white rounded-2xl rounded-bl-sm border border-slate-200;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  /* Data metric card */
+  .metric-card {
+    @apply glass-card rounded-2xl p-5 transition-all duration-300;
+  }
+  .metric-card:hover {
+    border-color: hsl(var(--primary) / 0.3);
+    box-shadow: 0 8px 32px hsl(var(--primary) / 0.1);
+    transform: translateY(-2px);
+  }
+
+  /* Heatmap intensity */
+  .heatmap-low { background: hsl(142 72% 38% / 0.6); }
+  .heatmap-moderate { background: hsl(38 92% 48% / 0.6); }
+  .heatmap-high { background: hsl(30 90% 50% / 0.6); }
+  .heatmap-critical { background: hsl(0 84% 55% / 0.6); }
+
+  /* Section heading */
+  .section-tag {
+    @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold;
+    background: hsl(220 75% 45% / 0.08);
+    color: hsl(220 75% 40%);
+    border: 1px solid hsl(220 75% 45% / 0.15);
+  }
+}
+
+/* =============================================================================
+   Scrollbar Styling
+   ============================================================================= */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.25) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 5px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.25);
+    border-radius: 3px;
+  }
+}

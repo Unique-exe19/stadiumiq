@@ -1,0 +1,110 @@
+name: 🚀 Deploy – Production
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*.*.*']
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: 🏟️ Deploy to Production
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: gcr.io
+          username: _json_key
+          password: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Extract version
+        id: version
+        run: echo "VERSION=${GITHUB_SHA::8}" >> $GITHUB_OUTPUT
+
+      - name: Build & Push API
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: infra/docker/Dockerfile.api
+          target: production
+          push: true
+          tags: |
+            gcr.io/${{ secrets.GCP_PROJECT }}/stadiumiq-api:${{ steps.version.outputs.VERSION }}
+            gcr.io/${{ secrets.GCP_PROJECT }}/stadiumiq-api:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            APP_VERSION=${{ steps.version.outputs.VERSION }}
+
+      - name: Build & Push AI Service
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: infra/docker/Dockerfile.ai
+          target: production
+          push: true
+          tags: |
+            gcr.io/${{ secrets.GCP_PROJECT }}/stadiumiq-ai:${{ steps.version.outputs.VERSION }}
+            gcr.io/${{ secrets.GCP_PROJECT }}/stadiumiq-ai:latest
+
+      - name: Deploy to Cloud Run (API)
+        run: |
+          gcloud run deploy stadiumiq-api \
+            --image gcr.io/${{ secrets.GCP_PROJECT }}/stadiumiq-api:${{ steps.version.outputs.VERSION }} \
+            --platform managed \
+            --region us-central1 \
+            --min-instances 2 \
+            --max-instances 20 \
+            --memory 512Mi \
+            --cpu 1 \
+            --concurrency 80 \
+            --set-env-vars NODE_ENV=production \
+            --set-secrets DATABASE_URL=stadiumiq-db-url:latest \
+            --set-secrets REDIS_URL=stadiumiq-redis-url:latest \
+            --set-secrets JWT_ACCESS_SECRET=stadiumiq-jwt-access:latest \
+            --set-secrets JWT_REFRESH_SECRET=stadiumiq-jwt-refresh:latest \
+            --set-secrets GEMINI_API_KEY=stadiumiq-gemini-key:latest \
+            --no-traffic
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/gcp-key.json
+
+      - name: Run smoke tests
+        run: |
+          STAGING_URL=$(gcloud run services describe stadiumiq-api --platform managed --region us-central1 --format 'value(status.url)')
+          curl -f "${STAGING_URL}/api/v1/health/live" || exit 1
+          echo "✅ Smoke test passed"
+
+      - name: Promote traffic
+        run: |
+          gcloud run services update-traffic stadiumiq-api \
+            --platform managed \
+            --region us-central1 \
+            --to-latest
+
+      - name: Deploy Frontend to Vercel
+        run: |
+          cd apps/web
+          npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }} \
+            --env NEXT_PUBLIC_API_URL=${{ secrets.API_URL }} \
+            --env NEXT_PUBLIC_MAPBOX_TOKEN=${{ secrets.MAPBOX_TOKEN }}
+
+      - name: Notify Sentry of deployment
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: stadiumiq
+          SENTRY_PROJECT: stadiumiq-api
+        with:
+          environment: production
+          version: ${{ steps.version.outputs.VERSION }}

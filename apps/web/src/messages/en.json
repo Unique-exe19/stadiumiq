@@ -1,0 +1,39 @@
+{
+  "home": {
+    "hero": {
+      "badge": "FIFA World Cup 2026 – Smart Stadium Solution",
+      "heading": "The AI Brain of Every Stadium",
+      "subheading": "Real-time crowd intelligence, multilingual AI assistance, accessible navigation, and intelligent transport orchestration.",
+      "cta_fan": "Enter Fan Portal",
+      "cta_staff": "Staff Dashboard"
+    },
+    "features": {
+      "heading": "Every challenge. One platform.",
+      "subheading": "StadiumIQ addresses all FIFA Smart Stadium challenge areas."
+    }
+  },
+  "nav": {
+    "fan": "Fan Portal",
+    "staff": "Staff Dashboard",
+    "security": "Security",
+    "volunteers": "Volunteers",
+    "sign_in": "Sign In"
+  },
+  "accessibility": {
+    "skip_to_main": "Skip to main content",
+    "dark_mode": "Switch to dark mode",
+    "light_mode": "Switch to light mode",
+    "change_language": "Change language"
+  },
+  "chat": {
+    "placeholder": "Ask about navigation, transport, accessibility...",
+    "send": "Send message",
+    "sending": "Sending message...",
+    "greeting": "Hi! I'm your StadiumIQ AI assistant. Ask me anything about the World Cup experience!"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Network error. Check your connection.",
+    "unauthorized": "Please sign in to continue."
+  }
+}
