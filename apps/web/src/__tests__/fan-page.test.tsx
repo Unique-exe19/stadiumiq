@@ -18,7 +18,7 @@ vi.mock('next/link', () => ({
     href,
     children,
     ...props
-  }: React.PropsWithChildren<{ href: string; [k: string]: unknown }>) =>
+  }: React.PropsWithChildren<{ href: string;[k: string]: unknown }>) =>
     React.createElement('a', { href, ...props }, children),
 }));
 
