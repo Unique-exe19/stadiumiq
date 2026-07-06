@@ -3,7 +3,7 @@
 // =============================================================================
 
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
@@ -26,10 +26,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 
     // Log slow queries in development
     if (process.env['NODE_ENV'] !== 'production') {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (this.$on as any)('query', (event: { query: string; duration: number }) => {
-        if (event.duration > 500) {
-          this.logger.warn(`Slow query (${event.duration}ms): ${event.query}`);
+      this.$on('query' as never, (event: unknown) => {
+        const queryEvent = event as Prisma.QueryEvent;
+        if (queryEvent.duration > 500) {
+          this.logger.warn(`Slow query (${queryEvent.duration}ms): ${queryEvent.query}`);
         }
       });
     }

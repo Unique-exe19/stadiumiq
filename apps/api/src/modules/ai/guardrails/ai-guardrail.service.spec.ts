@@ -2,7 +2,7 @@
 // AI Guardrail Service – Unit Tests
 // =============================================================================
 
-import { AiGuardrailService } from '../../src/modules/ai/guardrails/ai-guardrail.service';
+import { AiGuardrailService } from './ai-guardrail.service';
 
 describe('AiGuardrailService', () => {
   let service: AiGuardrailService;

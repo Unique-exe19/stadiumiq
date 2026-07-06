@@ -4,7 +4,7 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
-import { IncidentStatus, Incident as DBIncident } from '@prisma/client';
+import { IncidentStatus, Incident as DBIncident, IncidentUpdate as DBIncidentUpdate } from '@prisma/client';
 import type { Incident, CreateIncidentRequest, IncidentUpdate } from '@stadiumiq/shared-types';
 
 @Injectable()
@@ -79,8 +79,7 @@ export class IncidentsService {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private mapToIncident(record: any): Incident {
+  private mapToIncident(record: DBIncident & { updates?: DBIncidentUpdate[] }): Incident {
     return {
       id: record.id,
       stadiumId: record.stadiumId,
@@ -97,8 +96,7 @@ export class IncidentsService {
       aiSummary: record.aiSummary ?? undefined,
       aiRecommendations: record.aiRecommendations,
       updates: record.updates
-        ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          record.updates.map((u: any) => ({
+        ? record.updates.map((u: DBIncidentUpdate) => ({
             id: u.id,
             incidentId: u.incidentId,
             updatedBy: u.updatedBy,

@@ -1,5 +1,5 @@
 // =============================================================================
-// Crowd Analytics Service – Placeholder for AI-backed predictions
+// Crowd Analytics Service – Real-time Trend Analysis & AI-backed Predictions
 // =============================================================================
 
 import { Injectable } from '@nestjs/common';
