@@ -224,7 +224,7 @@ export class AiService {
           : 'No active crowd alerts.';
 
         const gateText = gates
-          .map((g: { name: string; status: any; estimatedWaitMinutes: number }) => `${g.name}: ${g.status} (${g.estimatedWaitMinutes}min wait)`)
+          .map((g: { name: string; status: string; estimatedWaitMinutes: number }) => `${g.name}: ${g.status} (${g.estimatedWaitMinutes}min wait)`)
           .join(', ');
 
         return `Stadium: ${stadium.name}\n${alertText}\nGates: ${gateText}`;

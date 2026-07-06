@@ -6,6 +6,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { RedisService } from '../../redis/redis.service';
 import type { Stadium, StadiumZone, StadiumGate } from '@stadiumiq/shared-types';
+import type { Stadium as DBStadium, StadiumZone as DBStadiumZone, StadiumGate as DBStadiumGate } from '@prisma/client';
 
 @Injectable()
 export class StadiumService {
@@ -22,7 +23,7 @@ export class StadiumService {
         const stadiums = await this.prisma.stadium.findMany({
           where: { isActive: true },
         });
-        return stadiums.map((s) => ({
+        return stadiums.map((s: DBStadium) => ({
           id: s.id,
           name: s.name,
           city: s.city,
@@ -73,7 +74,7 @@ export class StadiumService {
       cacheKey,
       async () => {
         const zones = await this.prisma.stadiumZone.findMany({ where: { stadiumId } });
-        return zones.map((z) => ({
+        return zones.map((z: DBStadiumZone) => ({
           id: z.id,
           stadiumId: z.stadiumId,
           name: z.name,
@@ -83,7 +84,7 @@ export class StadiumService {
           currentOccupancy: z.currentOccupancy,
           occupancyLevel: z.occupancyLevel as StadiumZone['occupancyLevel'],
           isAccessible: z.isAccessible,
-          boundaryPolygon: z.boundaryPolygon as any,
+          boundaryPolygon: z.boundaryPolygon as unknown as StadiumZone['boundaryPolygon'],
           centroid: { lat: z.centroidLat, lng: z.centroidLng },
         }));
       },
@@ -97,7 +98,7 @@ export class StadiumService {
       cacheKey,
       async () => {
         const gates = await this.prisma.stadiumGate.findMany({ where: { stadiumId } });
-        return gates.map((g) => ({
+        return gates.map((g: DBStadiumGate) => ({
           id: g.id,
           stadiumId: g.stadiumId,
           name: g.name,

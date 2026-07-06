@@ -4,6 +4,7 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
+import { IncidentStatus, Incident as DBIncident } from '@prisma/client';
 import type { Incident, CreateIncidentRequest, IncidentUpdate } from '@stadiumiq/shared-types';
 
 @Injectable()
@@ -41,7 +42,7 @@ export class IncidentsService {
       orderBy: { createdAt: 'desc' },
       include: { updates: true },
     });
-    return list.map((item) => this.mapToIncident(item));
+    return list.map((item: DBIncident) => this.mapToIncident(item));
   }
 
   async findOne(id: string): Promise<Incident> {
@@ -57,7 +58,7 @@ export class IncidentsService {
     const update = await this.prisma.incidentUpdate.create({
       data: {
         incidentId,
-        status: status as any,
+        status: status as IncidentStatus,
         note,
         updatedBy: userId,
       },
@@ -65,7 +66,7 @@ export class IncidentsService {
 
     await this.prisma.incident.update({
       where: { id: incidentId },
-      data: { status: status as any, resolvedAt: status === 'resolved' ? new Date() : undefined },
+      data: { status: status as IncidentStatus, resolvedAt: status === 'resolved' ? new Date() : undefined },
     });
 
     return {

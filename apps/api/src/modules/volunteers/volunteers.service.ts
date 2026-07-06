@@ -5,6 +5,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import type { VolunteerProfile, VolunteerTask, VolunteerBriefing } from '@stadiumiq/shared-types';
+import type { VolunteerTask as DBVolunteerTask } from '@prisma/client';
 
 @Injectable()
 export class VolunteersService {
@@ -43,7 +44,7 @@ export class VolunteersService {
       orderBy: { createdAt: 'desc' },
     });
 
-    return tasks.map((t: any) => ({
+    return tasks.map((t: DBVolunteerTask) => ({
       id: t.id,
       volunteerId: t.volunteerId,
       stadiumId: t.stadiumId,

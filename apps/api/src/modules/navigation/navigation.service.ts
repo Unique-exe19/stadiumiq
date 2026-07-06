@@ -11,7 +11,7 @@ export class NavigationService {
 
   async calculateRoute(req: NavigationRequest): Promise<Route> {
     const fromId = req.fromWaypointId ?? 'gate-b-uuid';
-    let toId = 'section-204-uuid';
+    const toId = 'section-204-uuid';
 
     // Fetch waypoints from DB or use standard ones
     const fromWaypoint: Waypoint = {
