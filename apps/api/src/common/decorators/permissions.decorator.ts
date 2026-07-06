@@ -1,8 +1,8 @@
 // =============================================================================
 // Permissions Decorator
 // =============================================================================
-
 import { SetMetadata } from '@nestjs/common';
+
 import type { Permission } from '@stadiumiq/shared-types';
 
 export const PERMISSIONS_KEY = 'permissions';

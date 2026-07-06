@@ -1,14 +1,14 @@
 // =============================================================================
 // Auth Service – Unit Tests
 // =============================================================================
-
+import { ConflictException, ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from './auth.service';
-import { PrismaService } from '../../database/prisma.service';
-import { TokenService } from './token.service';
-import { RedisService } from '../../redis/redis.service';
-import { UnauthorizedException, ConflictException, ForbiddenException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
+
+import { PrismaService } from '../../database/prisma.service';
+import { RedisService } from '../../redis/redis.service';
+import { AuthService } from './auth.service';
+import { TokenService } from './token.service';
 
 // ---------------------------------------------------------------------------
 // Mocks
@@ -21,7 +21,7 @@ const mockPrismaService = {
     update: jest.fn(),
   },
   auditLog: {
-    create: jest.fn().mockResolvedValue({}),  // always succeed silently
+    create: jest.fn().mockResolvedValue({}), // always succeed silently
   },
 };
 
@@ -67,7 +67,12 @@ describe('AuthService', () => {
     it('throws ConflictException when email already exists', async () => {
       mockPrismaService.user.findUnique.mockResolvedValue({ id: 'existing-id' });
       await expect(
-        authService.register({ email: 'taken@test.com', password: 'pass123', displayName: 'Test', role: 'fan' }),
+        authService.register({
+          email: 'taken@test.com',
+          password: 'pass123',
+          displayName: 'Test',
+          role: 'fan',
+        }),
       ).rejects.toThrow(ConflictException);
     });
 
@@ -113,9 +118,18 @@ describe('AuthService', () => {
         displayName: 'Upper',
         isActive: true,
       });
-      mockTokenService.generateTokenPair.mockResolvedValue({ accessToken: 'a', refreshToken: 'r', expiresIn: 900 });
+      mockTokenService.generateTokenPair.mockResolvedValue({
+        accessToken: 'a',
+        refreshToken: 'r',
+        expiresIn: 900,
+      });
 
-      await authService.register({ email: 'UPPER@TEST.COM', password: 'pass123', displayName: 'Upper', role: 'fan' });
+      await authService.register({
+        email: 'UPPER@TEST.COM',
+        password: 'pass123',
+        displayName: 'Upper',
+        role: 'fan',
+      });
 
       const createCall = mockPrismaService.user.create.mock.calls[0][0] as {
         data: { email: string };

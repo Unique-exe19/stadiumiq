@@ -1,10 +1,10 @@
 // =============================================================================
 // Navigation Request DTO
 // =============================================================================
-
-import { IsEnum, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import type { RouteType, WaypointType, AccessibilityMode } from '@stadiumiq/shared-types';
+import { IsEnum, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
+
+import type { AccessibilityMode, RouteType, WaypointType } from '@stadiumiq/shared-types';
 
 export class NavigationRequestDto {
   @ApiProperty({ description: 'Stadium ID' })
@@ -28,7 +28,9 @@ export class NavigationRequestDto {
   @MaxLength(100)
   destinationZone?: string;
 
-  @ApiPropertyOptional({ enum: ['gate', 'elevator', 'escalator', 'ramp', 'restroom', 'food', 'medical', 'info', 'seat'] })
+  @ApiPropertyOptional({
+    enum: ['gate', 'elevator', 'escalator', 'ramp', 'restroom', 'food', 'medical', 'info', 'seat'],
+  })
   @IsOptional()
   @IsEnum(['gate', 'elevator', 'escalator', 'ramp', 'restroom', 'food', 'medical', 'info', 'seat'])
   destinationType?: WaypointType;

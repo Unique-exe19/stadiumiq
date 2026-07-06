@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
+
+import { AiDemoSection } from '@/components/home/ai-demo-section';
+import { FeaturesGrid } from '@/components/home/features-grid';
 import { HeroSection } from '@/components/home/hero-section';
 import { StatsBar } from '@/components/home/stats-bar';
-import { FeaturesGrid } from '@/components/home/features-grid';
-import { AiDemoSection } from '@/components/home/ai-demo-section';
 import { TestimonialsSection } from '@/components/home/testimonials-section';
 
 export const dynamic = 'force-dynamic';

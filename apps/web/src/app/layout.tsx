@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Outfit } from 'next/font/google';
+
 import { QueryProvider } from '@/components/providers/query-provider';
 import { Toaster } from '@/components/ui/toaster';
 import '@/styles/globals.css';
@@ -26,7 +27,15 @@ export const metadata: Metadata = {
   },
   description:
     'AI-powered smart stadium operations for FIFA World Cup 2026. Real-time navigation, crowd management, transport, and multilingual assistance.',
-  keywords: ['FIFA', 'World Cup 2026', 'stadium', 'navigation', 'crowd management', 'AI', 'accessibility'],
+  keywords: [
+    'FIFA',
+    'World Cup 2026',
+    'stadium',
+    'navigation',
+    'crowd management',
+    'AI',
+    'accessibility',
+  ],
   authors: [{ name: 'StadiumIQ Team' }],
   creator: 'StadiumIQ',
   publisher: 'StadiumIQ',
@@ -53,15 +62,9 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      dir="ltr"
-      className={`${inter.variable} ${outfit.variable}`}
-    >
+    <html lang="en" dir="ltr" className={`${inter.variable} ${outfit.variable}`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

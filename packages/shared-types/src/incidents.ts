@@ -1,8 +1,7 @@
 // =============================================================================
 // Incident Management Types
 // =============================================================================
-
-import type { UUID, GeoPoint, ISODateString, AuditableEntity } from './common';
+import type { AuditableEntity, GeoPoint, ISODateString, UUID } from './common';
 
 export type IncidentType =
   | 'medical'
@@ -17,7 +16,8 @@ export type IncidentType =
   | 'weather'
   | 'other';
 
-export type IncidentStatus = 'reported' | 'acknowledged' | 'responding' | 'contained' | 'resolved' | 'closed';
+export type IncidentStatus =
+  'reported' | 'acknowledged' | 'responding' | 'contained' | 'resolved' | 'closed';
 export type IncidentPriority = 'low' | 'medium' | 'high' | 'critical';
 
 export interface Incident extends AuditableEntity {

@@ -1,9 +1,9 @@
 // =============================================================================
 // RBAC Decorators
 // =============================================================================
-
 import { SetMetadata } from '@nestjs/common';
-import type { UserRole, Permission } from '@stadiumiq/shared-types';
+
+import type { Permission, UserRole } from '@stadiumiq/shared-types';
 
 export const ROLES_KEY = 'roles';
 export const PERMISSIONS_KEY = 'permissions';

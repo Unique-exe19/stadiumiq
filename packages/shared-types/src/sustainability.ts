@@ -1,8 +1,7 @@
 // =============================================================================
 // Sustainability Types
 // =============================================================================
-
-import type { UUID, ISODateString } from './common';
+import type { ISODateString, UUID } from './common';
 
 export type EnergySource = 'solar' | 'grid' | 'backup_generator' | 'wind';
 export type WasteCategory = 'recycling' | 'compost' | 'landfill' | 'hazardous';

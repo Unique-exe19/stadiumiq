@@ -1,9 +1,16 @@
 // =============================================================================
 // Auth DTOs – Input Validation
 // =============================================================================
-
-import { IsEmail, IsEnum, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  Matches,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class RegisterDto {
   @ApiProperty({ example: 'fan@example.com' })
@@ -15,10 +22,9 @@ export class RegisterDto {
   @IsString()
   @MinLength(8)
   @MaxLength(72)
-  @Matches(
-    /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/,
-    { message: 'Password must contain uppercase, number, and special character' },
-  )
+  @Matches(/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/, {
+    message: 'Password must contain uppercase, number, and special character',
+  })
   password!: string;
 
   @ApiProperty({ example: 'John Doe' })

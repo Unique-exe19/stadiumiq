@@ -1,10 +1,19 @@
 // =============================================================================
 // Stadium & Venue Types
 // =============================================================================
+import type { GeoPoint, ISODateString, TimestampedEntity, UUID } from './common';
 
-import type { UUID, GeoPoint, ISODateString, TimestampedEntity } from './common';
-
-export type ZoneType = 'entrance' | 'seating' | 'concourse' | 'food_beverage' | 'medical' | 'security' | 'accessible' | 'vip' | 'press' | 'staff';
+export type ZoneType =
+  | 'entrance'
+  | 'seating'
+  | 'concourse'
+  | 'food_beverage'
+  | 'medical'
+  | 'security'
+  | 'accessible'
+  | 'vip'
+  | 'press'
+  | 'staff';
 
 export type GateStatus = 'open' | 'closed' | 'limited' | 'accessible_only';
 

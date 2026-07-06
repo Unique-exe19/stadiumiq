@@ -1,14 +1,14 @@
 // =============================================================================
 // Crowd Service – Real-time Crowd Intelligence
 // =============================================================================
-
 import { Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
+import type { CrowdAlert, HeatmapData } from '@stadiumiq/shared-types';
+
 import { PrismaService } from '../../database/prisma.service';
 import { RedisService } from '../../redis/redis.service';
-import type { CrowdAlert, HeatmapData } from '@stadiumiq/shared-types';
 
 const OCCUPANCY_THRESHOLDS = {
   low: 50,
@@ -118,10 +118,7 @@ export class CrowdService {
     );
   }
 
-  async updateZoneOccupancy(
-    zoneId: string,
-    currentOccupancy: number,
-  ): Promise<void> {
+  async updateZoneOccupancy(zoneId: string, currentOccupancy: number): Promise<void> {
     const zone = await this.prisma.stadiumZone.findUniqueOrThrow({
       where: { id: zoneId },
       include: { stadium: true },
@@ -129,9 +126,13 @@ export class CrowdService {
 
     const occupancyPercent = zone.capacity > 0 ? (currentOccupancy / zone.capacity) * 100 : 0;
     const level =
-      occupancyPercent >= OCCUPANCY_THRESHOLDS.critical ? 'critical' :
-      occupancyPercent >= OCCUPANCY_THRESHOLDS.high ? 'high' :
-      occupancyPercent >= OCCUPANCY_THRESHOLDS.moderate ? 'moderate' : 'low';
+      occupancyPercent >= OCCUPANCY_THRESHOLDS.critical
+        ? 'critical'
+        : occupancyPercent >= OCCUPANCY_THRESHOLDS.high
+          ? 'high'
+          : occupancyPercent >= OCCUPANCY_THRESHOLDS.moderate
+            ? 'moderate'
+            : 'low';
 
     await this.prisma.stadiumZone.update({
       where: { id: zoneId },
@@ -150,7 +151,13 @@ export class CrowdService {
 
     // Auto-generate alert if critical
     if (level === 'critical') {
-      await this.generateCrowdAlert(zone.id, zone.stadiumId, 'overcrowding', 'critical', currentOccupancy);
+      await this.generateCrowdAlert(
+        zone.id,
+        zone.stadiumId,
+        'overcrowding',
+        'critical',
+        currentOccupancy,
+      );
     }
   }
 

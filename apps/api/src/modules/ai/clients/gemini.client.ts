@@ -1,16 +1,15 @@
 // =============================================================================
 // Gemini Client – Google Generative AI with NVIDIA NIM adapter fallback
 // =============================================================================
-
+import {
+  Content,
+  GenerateContentStreamResult,
+  GoogleGenerativeAI,
+  HarmBlockThreshold,
+  HarmCategory,
+} from '@google/generative-ai';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-  GoogleGenerativeAI,
-  HarmCategory,
-  HarmBlockThreshold,
-  GenerateContentStreamResult,
-  Content,
-} from '@google/generative-ai';
 import axios from 'axios';
 
 export interface GeminiStreamOptions {
@@ -22,10 +21,22 @@ export interface GeminiStreamOptions {
 }
 
 const SAFETY_SETTINGS = [
-  { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-  { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-  { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-  { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
+  {
+    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+    threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+  },
 ];
 
 @Injectable()
@@ -36,7 +47,8 @@ export class GeminiClient {
 
   constructor(private readonly config: ConfigService) {
     const geminiKey = this.config.get<string>('GEMINI_API_KEY', '');
-    const useNvidia = !geminiKey || geminiKey.includes('placeholder') || geminiKey.includes('CHANGE_ME');
+    const useNvidia =
+      !geminiKey || geminiKey.includes('placeholder') || geminiKey.includes('CHANGE_ME');
 
     if (!useNvidia) {
       this.genAI = new GoogleGenerativeAI(geminiKey);
@@ -47,7 +59,8 @@ export class GeminiClient {
   async *streamChat(options: GeminiStreamOptions): AsyncGenerator<string> {
     const geminiKey = this.config.get<string>('GEMINI_API_KEY', '');
     const nvidiaKey = this.config.get<string>('NVIDIA_API_KEY', '');
-    const useNvidia = !geminiKey || geminiKey.includes('placeholder') || geminiKey.includes('CHANGE_ME');
+    const useNvidia =
+      !geminiKey || geminiKey.includes('placeholder') || geminiKey.includes('CHANGE_ME');
 
     if (useNvidia && nvidiaKey) {
       this.logger.log('Routing streamChat query to NVIDIA NIM API');
@@ -140,7 +153,8 @@ export class GeminiClient {
   async generateText(prompt: string, temperature = 0.2): Promise<string> {
     const geminiKey = this.config.get<string>('GEMINI_API_KEY', '');
     const nvidiaKey = this.config.get<string>('NVIDIA_API_KEY', '');
-    const useNvidia = !geminiKey || geminiKey.includes('placeholder') || geminiKey.includes('CHANGE_ME');
+    const useNvidia =
+      !geminiKey || geminiKey.includes('placeholder') || geminiKey.includes('CHANGE_ME');
 
     if (useNvidia && nvidiaKey) {
       this.logger.log('Routing generateText query to NVIDIA NIM API');
@@ -184,7 +198,8 @@ export class GeminiClient {
   async generateEmbedding(text: string): Promise<number[]> {
     const geminiKey = this.config.get<string>('GEMINI_API_KEY', '');
     const nvidiaKey = this.config.get<string>('NVIDIA_API_KEY', '');
-    const useNvidia = !geminiKey || geminiKey.includes('placeholder') || geminiKey.includes('CHANGE_ME');
+    const useNvidia =
+      !geminiKey || geminiKey.includes('placeholder') || geminiKey.includes('CHANGE_ME');
 
     if (useNvidia && nvidiaKey) {
       try {

@@ -1,24 +1,24 @@
 // =============================================================================
 // StadiumIQ API – Application Entry Point
 // =============================================================================
-
-import './tracing'; // Must be imported first for OpenTelemetry instrumentation
-
-import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+// Must be imported first for OpenTelemetry instrumentation
+
+import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { WinstonModule } from 'nest-winston';
 import compression from 'compression';
 import helmet from 'helmet';
+import { WinstonModule } from 'nest-winston';
 
 import { AppModule } from './app.module';
-import { createLoggerConfig } from './config/logger.config';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { TransformInterceptor } from './common/interceptors/transform.interceptor';
-import { RequestIdInterceptor } from './common/interceptors/request-id.interceptor';
 import { AuditInterceptor } from './common/interceptors/audit.interceptor';
+import { RequestIdInterceptor } from './common/interceptors/request-id.interceptor';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { createLoggerConfig } from './config/logger.config';
 import { PrismaService } from './database/prisma.service';
+import './tracing';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, {

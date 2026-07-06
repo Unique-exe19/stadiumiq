@@ -2,17 +2,17 @@
 
 import { motion } from 'framer-motion';
 import {
-  Map,
-  Users,
   Accessibility,
-  Bus,
-  Building2,
-  UserCheck,
-  ShieldCheck,
-  Leaf,
-  Globe,
   Brain,
+  Building2,
+  Bus,
+  Globe,
+  Leaf,
+  Map,
+  ShieldCheck,
   Star,
+  UserCheck,
+  Users,
   Wifi,
 } from 'lucide-react';
 
@@ -20,7 +20,8 @@ const FEATURES = [
   {
     icon: Map,
     title: 'AI Stadium Navigator',
-    description: 'Real-time indoor navigation with voice guidance, accessibility routes, and crowd-aware pathfinding.',
+    description:
+      'Real-time indoor navigation with voice guidance, accessibility routes, and crowd-aware pathfinding.',
     color: 'text-blue-400',
     bg: 'bg-blue-500/10',
     border: 'border-blue-500/20',
@@ -29,7 +30,8 @@ const FEATURES = [
   {
     icon: Users,
     title: 'Crowd Intelligence',
-    description: 'Live density heatmaps, predictive crowd modeling, and proactive congestion alerts.',
+    description:
+      'Live density heatmaps, predictive crowd modeling, and proactive congestion alerts.',
     color: 'text-orange-400',
     bg: 'bg-orange-500/10',
     border: 'border-orange-500/20',
@@ -38,7 +40,8 @@ const FEATURES = [
   {
     icon: Accessibility,
     title: 'Accessibility Concierge',
-    description: 'WCAG 2.2 AA compliant. Wheelchair routes, audio descriptions, sign language resources, and more.',
+    description:
+      'WCAG 2.2 AA compliant. Wheelchair routes, audio descriptions, sign language resources, and more.',
     color: 'text-purple-400',
     bg: 'bg-purple-500/10',
     border: 'border-purple-500/20',
@@ -47,7 +50,8 @@ const FEATURES = [
   {
     icon: Bus,
     title: 'Transport Orchestrator',
-    description: 'Live departures, AI-recommended routes, shuttle scheduling, and post-match surge management.',
+    description:
+      'Live departures, AI-recommended routes, shuttle scheduling, and post-match surge management.',
     color: 'text-green-400',
     bg: 'bg-green-500/10',
     border: 'border-green-500/20',
@@ -56,7 +60,8 @@ const FEATURES = [
   {
     icon: Building2,
     title: 'Venue Ops Dashboard',
-    description: 'Unified command center for managers: occupancy, incidents, gate status, and AI decision support.',
+    description:
+      'Unified command center for managers: occupancy, incidents, gate status, and AI decision support.',
     color: 'text-cyan-400',
     bg: 'bg-cyan-500/10',
     border: 'border-cyan-500/20',
@@ -65,7 +70,8 @@ const FEATURES = [
   {
     icon: UserCheck,
     title: 'Volunteer AI Hub',
-    description: 'AI-generated briefings, task assignments, shift management, and multilingual support for volunteers.',
+    description:
+      'AI-generated briefings, task assignments, shift management, and multilingual support for volunteers.',
     color: 'text-yellow-400',
     bg: 'bg-yellow-500/10',
     border: 'border-yellow-500/20',
@@ -74,7 +80,8 @@ const FEATURES = [
   {
     icon: ShieldCheck,
     title: 'Security Intelligence',
-    description: 'Anomaly detection, threat level assessment, incident reporting, and AI-generated security briefings.',
+    description:
+      'Anomaly detection, threat level assessment, incident reporting, and AI-generated security briefings.',
     color: 'text-red-400',
     bg: 'bg-red-500/10',
     border: 'border-red-500/20',
@@ -83,7 +90,8 @@ const FEATURES = [
   {
     icon: Leaf,
     title: 'Sustainability Tracker',
-    description: 'Real-time energy, water, and waste monitoring with AI recommendations to reduce carbon footprint.',
+    description:
+      'Real-time energy, water, and waste monitoring with AI recommendations to reduce carbon footprint.',
     color: 'text-emerald-400',
     bg: 'bg-emerald-500/10',
     border: 'border-emerald-500/20',
@@ -92,7 +100,8 @@ const FEATURES = [
   {
     icon: Globe,
     title: 'Multilingual AI',
-    description: '50+ languages, RTL support, dialect awareness, and real-time translation powered by Gemini.',
+    description:
+      '50+ languages, RTL support, dialect awareness, and real-time translation powered by Gemini.',
     color: 'text-indigo-400',
     bg: 'bg-indigo-500/10',
     border: 'border-indigo-500/20',
@@ -101,7 +110,8 @@ const FEATURES = [
   {
     icon: Brain,
     title: 'AI Decision Support',
-    description: 'ReAct reasoning agents, RAG knowledge base, and natural language querying for operations staff.',
+    description:
+      'ReAct reasoning agents, RAG knowledge base, and natural language querying for operations staff.',
     color: 'text-pink-400',
     bg: 'bg-pink-500/10',
     border: 'border-pink-500/20',
@@ -110,7 +120,8 @@ const FEATURES = [
   {
     icon: Star,
     title: 'Fan Experience',
-    description: 'Personalized recommendations, live match stats, seat navigation, food & beverage queues.',
+    description:
+      'Personalized recommendations, live match stats, seat navigation, food & beverage queues.',
     color: 'text-amber-400',
     bg: 'bg-amber-500/10',
     border: 'border-amber-500/20',
@@ -119,7 +130,8 @@ const FEATURES = [
   {
     icon: Wifi,
     title: 'Offline PWA',
-    description: 'Works offline in poor connectivity. Service worker caches navigation maps and key information.',
+    description:
+      'Works offline in poor connectivity. Service worker caches navigation maps and key information.',
     color: 'text-teal-400',
     bg: 'bg-teal-500/10',
     border: 'border-teal-500/20',
@@ -141,10 +153,7 @@ const cardVariants = {
 
 export function FeaturesGrid() {
   return (
-    <section
-      className="py-24 px-4 sm:px-6 lg:px-8"
-      aria-labelledby="features-heading"
-    >
+    <section className="py-24 px-4 sm:px-6 lg:px-8" aria-labelledby="features-heading">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <motion.p
@@ -171,7 +180,8 @@ export function FeaturesGrid() {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            StadiumIQ addresses all FIFA Smart Stadium challenge areas with production-grade AI solutions.
+            StadiumIQ addresses all FIFA Smart Stadium challenge areas with production-grade AI
+            solutions.
           </motion.p>
         </div>
 
@@ -194,21 +204,12 @@ export function FeaturesGrid() {
               aria-label={`${title}: ${challenge} challenge area`}
             >
               <div className={`inline-flex p-2.5 rounded-xl ${bg} ${border} border mb-4`}>
-                <Icon
-                  className={`h-5 w-5 ${color}`}
-                  aria-hidden="true"
-                />
+                <Icon className={`h-5 w-5 ${color}`} aria-hidden="true" />
               </div>
-              <h3 className="font-display font-semibold text-foreground mb-2 text-sm">
-                {title}
-              </h3>
-              <p className="text-muted-foreground text-xs leading-relaxed">
-                {description}
-              </p>
+              <h3 className="font-display font-semibold text-foreground mb-2 text-sm">{title}</h3>
+              <p className="text-muted-foreground text-xs leading-relaxed">{description}</p>
               <div className="mt-3 pt-3 border-t border-white/5">
-                <span className={`text-xs font-medium ${color} opacity-70`}>
-                  ✓ {challenge}
-                </span>
+                <span className={`text-xs font-medium ${color} opacity-70`}>✓ {challenge}</span>
               </div>
             </motion.div>
           ))}

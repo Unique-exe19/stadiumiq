@@ -102,10 +102,13 @@ module.exports = {
       },
       backgroundImage: {
         // Light premium gradients
-        'gradient-hero': 'linear-gradient(160deg, hsl(220,60%,96%) 0%, hsl(220,80%,92%) 40%, hsl(38,90%,93%) 100%)',
-        'gradient-stadium': 'linear-gradient(135deg, hsl(220,75%,96%) 0%, hsl(220,60%,90%) 50%, hsl(220,50%,85%) 100%)',
+        'gradient-hero':
+          'linear-gradient(160deg, hsl(220,60%,96%) 0%, hsl(220,80%,92%) 40%, hsl(38,90%,93%) 100%)',
+        'gradient-stadium':
+          'linear-gradient(135deg, hsl(220,75%,96%) 0%, hsl(220,60%,90%) 50%, hsl(220,50%,85%) 100%)',
         'gradient-card': 'linear-gradient(135deg, hsl(0,0%,100%) 0%, hsl(220,30%,97%) 100%)',
-        'gradient-glow': 'radial-gradient(ellipse at center, hsl(220,75%,50%,0.08) 0%, transparent 70%)',
+        'gradient-glow':
+          'radial-gradient(ellipse at center, hsl(220,75%,50%,0.08) 0%, transparent 70%)',
         'gradient-cta': 'linear-gradient(135deg, hsl(220,75%,45%) 0%, hsl(220,80%,38%) 100%)',
       },
       boxShadow: {
@@ -125,7 +128,7 @@ module.exports = {
         'slide-up': 'slideUp 0.4s ease-out',
         'slide-in-right': 'slideInRight 0.3s ease-out',
         'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
-        'float': 'float 3s ease-in-out infinite',
+        float: 'float 3s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {

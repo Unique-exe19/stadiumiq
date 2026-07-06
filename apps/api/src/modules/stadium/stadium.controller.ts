@@ -1,13 +1,13 @@
 // =============================================================================
 // Stadium Controller
 // =============================================================================
-
 import { Controller, Get, Param, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { StadiumService } from './stadium.service';
+
+import { RequirePermissions } from '../../common/decorators/permissions.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
-import { RequirePermissions } from '../../common/decorators/permissions.decorator';
+import { StadiumService } from './stadium.service';
 
 @ApiTags('stadium')
 @Controller({ path: 'stadiums', version: '1' })

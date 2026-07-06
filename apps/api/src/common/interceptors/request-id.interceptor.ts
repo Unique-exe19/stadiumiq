@@ -1,10 +1,9 @@
 // =============================================================================
 // Request ID Interceptor
 // =============================================================================
-
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { Request, Response } from 'express';
+import { Observable } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()

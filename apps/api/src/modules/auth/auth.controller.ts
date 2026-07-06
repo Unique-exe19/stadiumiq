@@ -1,7 +1,6 @@
 // =============================================================================
 // Auth Controller
 // =============================================================================
-
 import {
   Body,
   Controller,
@@ -16,11 +15,12 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 
+import type { JwtPayload } from '@stadiumiq/shared-types';
+
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import type { JwtPayload } from '@stadiumiq/shared-types';
 
 interface RequestWithUser {
   user: JwtPayload;
@@ -64,10 +64,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Revoke refresh token and invalidate session' })
-  async logout(
-    @Request() req: RequestWithUser,
-    @Body('refreshToken') refreshToken: string,
-  ) {
+  async logout(@Request() req: RequestWithUser, @Body('refreshToken') refreshToken: string) {
     await this.authService.logout(req.user.sub, refreshToken);
   }
 

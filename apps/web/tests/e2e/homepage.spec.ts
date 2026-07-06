@@ -2,9 +2,8 @@
 // E2E Test – Fan Portal Homepage
 // Accessibility & User Journey
 // =============================================================================
-
-import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { expect, test } from '@playwright/test';
 
 test.describe('Homepage – Accessibility', () => {
   test.beforeEach(async ({ page }) => {
@@ -46,17 +45,13 @@ test.describe('Homepage – Accessibility', () => {
   });
 
   test('should have meta description', async ({ page }) => {
-    const metaDesc = await page
-      .locator('meta[name="description"]')
-      .getAttribute('content');
+    const metaDesc = await page.locator('meta[name="description"]').getAttribute('content');
     expect(metaDesc).toBeTruthy();
     expect(metaDesc!.length).toBeGreaterThan(50);
   });
 
   test('all images should have alt text', async ({ page }) => {
-    const imagesWithoutAlt = await page
-      .locator('img:not([alt])')
-      .count();
+    const imagesWithoutAlt = await page.locator('img:not([alt])').count();
     expect(imagesWithoutAlt).toBe(0);
   });
 
@@ -85,9 +80,7 @@ test.describe('AI Chat Demo – Interaction', () => {
   });
 
   test('should allow sending a quick prompt', async ({ page }) => {
-    const promptBtn = page
-      .locator('[aria-label*="Quick question"]')
-      .first();
+    const promptBtn = page.locator('[aria-label*="Quick question"]').first();
     await promptBtn.click();
 
     // Wait for AI response

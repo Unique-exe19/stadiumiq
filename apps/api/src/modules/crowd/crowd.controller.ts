@@ -1,15 +1,14 @@
 // =============================================================================
 // Crowd Controller
 // =============================================================================
-
-import { Controller, Get, Param, Put, Body, UseGuards, ParseUUIDPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Put, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 
-import { CrowdService } from './crowd.service';
+import { RequirePermissions } from '../../common/decorators/permissions.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
-import { RequirePermissions } from '../../common/decorators/permissions.decorator';
+import { CrowdService } from './crowd.service';
 
 @ApiTags('crowd')
 @Controller({ path: 'crowd', version: '1' })

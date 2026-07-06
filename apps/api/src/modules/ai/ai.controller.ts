@@ -1,7 +1,6 @@
 // =============================================================================
 // AI Controller – SSE Streaming Chat Endpoint
 // =============================================================================
-
 import {
   Body,
   Controller,
@@ -14,17 +13,18 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
+import { Response } from 'express';
 
-import { AiService } from './ai.service';
-import { ConversationService, StoredConversation } from './conversation.service';
+import type { JwtPayload } from '@stadiumiq/shared-types';
+
+import { RequirePermissions } from '../../common/decorators/permissions.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
-import { RequirePermissions } from '../../common/decorators/permissions.decorator';
+import { AiService } from './ai.service';
+import { ConversationService, StoredConversation } from './conversation.service';
 import { AiChatDto } from './dto/ai-chat.dto';
-import type { JwtPayload } from '@stadiumiq/shared-types';
 
 interface RequestWithUser {
   user: JwtPayload;
@@ -50,12 +50,7 @@ export class AiController {
     @Request() req: RequestWithUser,
     @Res() res: Response,
   ): Promise<void> {
-    await this.aiService.streamChat(
-      dto,
-      req.user.sub,
-      res,
-      req.user.role === 'fan' ? 'en' : 'en',
-    );
+    await this.aiService.streamChat(dto, req.user.sub, res, req.user.role === 'fan' ? 'en' : 'en');
   }
 
   @Get('conversations')

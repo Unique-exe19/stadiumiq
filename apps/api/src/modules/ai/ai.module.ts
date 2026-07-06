@@ -1,13 +1,13 @@
 // =============================================================================
 // AI Module
 // =============================================================================
-
 import { Module } from '@nestjs/common';
+
 import { AiController } from './ai.controller';
 import { AiService } from './ai.service';
 import { GeminiClient } from './clients/gemini.client';
-import { AiGuardrailService } from './guardrails/ai-guardrail.service';
 import { ConversationService } from './conversation.service';
+import { AiGuardrailService } from './guardrails/ai-guardrail.service';
 
 @Module({
   controllers: [AiController],

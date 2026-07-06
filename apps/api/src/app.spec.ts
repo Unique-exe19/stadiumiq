@@ -1,17 +1,17 @@
 // =============================================================================
 // App / Health Unit Tests
 // =============================================================================
-
-import { Test, TestingModule } from '@nestjs/testing';
-import { HealthController } from './modules/health/health.controller';
 import {
-  HealthCheckService,
-  PrismaHealthIndicator,
-  MemoryHealthIndicator,
   DiskHealthIndicator,
+  HealthCheckService,
+  MemoryHealthIndicator,
+  PrismaHealthIndicator,
 } from '@nestjs/terminus';
-import { RedisHealthIndicator } from './modules/health/redis.health';
+import { Test, TestingModule } from '@nestjs/testing';
+
 import { PrismaService } from './database/prisma.service';
+import { HealthController } from './modules/health/health.controller';
+import { RedisHealthIndicator } from './modules/health/redis.health';
 
 const mockHealthCheckService = {
   check: jest.fn().mockImplementation((indicators) => {

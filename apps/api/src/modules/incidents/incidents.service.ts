@@ -1,11 +1,16 @@
 // =============================================================================
 // Incidents Service
 // =============================================================================
-
 import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Incident as DBIncident,
+  IncidentUpdate as DBIncidentUpdate,
+  IncidentStatus,
+} from '@prisma/client';
+
+import type { CreateIncidentRequest, Incident, IncidentUpdate } from '@stadiumiq/shared-types';
+
 import { PrismaService } from '../../database/prisma.service';
-import { IncidentStatus, Incident as DBIncident, IncidentUpdate as DBIncidentUpdate } from '@prisma/client';
-import type { Incident, CreateIncidentRequest, IncidentUpdate } from '@stadiumiq/shared-types';
 
 @Injectable()
 export class IncidentsService {
@@ -54,7 +59,12 @@ export class IncidentsService {
     return this.mapToIncident(item);
   }
 
-  async addUpdate(incidentId: string, status: string, note: string, userId: string): Promise<IncidentUpdate> {
+  async addUpdate(
+    incidentId: string,
+    status: string,
+    note: string,
+    userId: string,
+  ): Promise<IncidentUpdate> {
     const update = await this.prisma.incidentUpdate.create({
       data: {
         incidentId,
@@ -66,7 +76,10 @@ export class IncidentsService {
 
     await this.prisma.incident.update({
       where: { id: incidentId },
-      data: { status: status as IncidentStatus, resolvedAt: status === 'resolved' ? new Date() : undefined },
+      data: {
+        status: status as IncidentStatus,
+        resolvedAt: status === 'resolved' ? new Date() : undefined,
+      },
     });
 
     return {

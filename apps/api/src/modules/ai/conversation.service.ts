@@ -1,11 +1,12 @@
 // =============================================================================
 // Conversation Service – Manages AI chat histories
 // =============================================================================
-
 import { Injectable, NotFoundException } from '@nestjs/common';
+
+import type { AiAgentType, AiRole } from '@stadiumiq/shared-types';
+
 import { PrismaService } from '../../database/prisma.service';
 import { RedisService } from '../../redis/redis.service';
-import type { AiAgentType, AiRole } from '@stadiumiq/shared-types';
 
 export interface StoredConversation {
   id: string;
@@ -63,11 +64,7 @@ export class ConversationService {
     return result;
   }
 
-  async addMessage(
-    conversationId: string,
-    role: AiRole,
-    content: string,
-  ): Promise<void> {
+  async addMessage(conversationId: string, role: AiRole, content: string): Promise<void> {
     await this.prisma.aiMessage.create({
       data: { conversationId, role, content },
     });

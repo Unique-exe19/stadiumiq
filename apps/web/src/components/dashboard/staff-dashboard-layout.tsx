@@ -1,23 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+
 import { motion } from 'framer-motion';
-import {
-  Users,
-  AlertTriangle,
-  TrendingUp,
-  Shield,
-  Activity,
-  Bell,
-  RefreshCw,
-} from 'lucide-react';
-import { NavigationBar } from '@/components/navigation/navigation-bar';
-import { CrowdHeatmapCard } from '@/components/dashboard/crowd-heatmap-card';
-import { OccupancyMetricsCard } from '@/components/dashboard/occupancy-metrics-card';
+import { Activity, AlertTriangle, Bell, RefreshCw, Shield, TrendingUp, Users } from 'lucide-react';
+
 import { ActiveAlertsCard } from '@/components/dashboard/active-alerts-card';
-import { TransportStatusCard } from '@/components/dashboard/transport-status-card';
 import { AiInsightsPanel } from '@/components/dashboard/ai-insights-panel';
+import { CrowdHeatmapCard } from '@/components/dashboard/crowd-heatmap-card';
 import { IncidentsFeed } from '@/components/dashboard/incidents-feed';
+import { OccupancyMetricsCard } from '@/components/dashboard/occupancy-metrics-card';
+import { TransportStatusCard } from '@/components/dashboard/transport-status-card';
+import { NavigationBar } from '@/components/navigation/navigation-bar';
 import { Button } from '@/components/ui/button';
 
 const DEMO_METRICS = {
@@ -97,15 +91,59 @@ export function StaffDashboardLayout() {
 
         {/* KPI metrics row */}
         <section aria-labelledby="kpi-heading">
-          <h2 id="kpi-heading" className="sr-only">Key Performance Indicators</h2>
+          <h2 id="kpi-heading" className="sr-only">
+            Key Performance Indicators
+          </h2>
           <dl className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-6">
             {[
-              { label: 'Occupancy', value: `${DEMO_METRICS.occupancyPercent}%`, sub: `${DEMO_METRICS.totalOccupancy.toLocaleString()} / ${DEMO_METRICS.capacity.toLocaleString()}`, icon: Users, color: 'text-blue-400', status: 'moderate' },
-              { label: 'Active Alerts', value: DEMO_METRICS.activeAlerts, sub: '1 critical, 1 warning', icon: AlertTriangle, color: 'text-orange-400', status: 'warning' },
-              { label: 'Active Incidents', value: DEMO_METRICS.activeIncidents, sub: 'Medical – Section 204', icon: Activity, color: 'text-red-400', status: 'high' },
-              { label: 'Volunteers On Duty', value: DEMO_METRICS.volunteersOnDuty.toLocaleString(), sub: 'Fully staffed', icon: Users, color: 'text-green-400', status: 'low' },
-              { label: 'Gates Open', value: `${DEMO_METRICS.gatesOpen}/${DEMO_METRICS.gatesOpen + DEMO_METRICS.gateClosed}`, sub: '2 limited capacity', icon: Shield, color: 'text-cyan-400', status: 'low' },
-              { label: 'Crowd Flow', value: '12.4/min', sub: 'Normal ingress rate', icon: TrendingUp, color: 'text-purple-400', status: 'low' },
+              {
+                label: 'Occupancy',
+                value: `${DEMO_METRICS.occupancyPercent}%`,
+                sub: `${DEMO_METRICS.totalOccupancy.toLocaleString()} / ${DEMO_METRICS.capacity.toLocaleString()}`,
+                icon: Users,
+                color: 'text-blue-400',
+                status: 'moderate',
+              },
+              {
+                label: 'Active Alerts',
+                value: DEMO_METRICS.activeAlerts,
+                sub: '1 critical, 1 warning',
+                icon: AlertTriangle,
+                color: 'text-orange-400',
+                status: 'warning',
+              },
+              {
+                label: 'Active Incidents',
+                value: DEMO_METRICS.activeIncidents,
+                sub: 'Medical – Section 204',
+                icon: Activity,
+                color: 'text-red-400',
+                status: 'high',
+              },
+              {
+                label: 'Volunteers On Duty',
+                value: DEMO_METRICS.volunteersOnDuty.toLocaleString(),
+                sub: 'Fully staffed',
+                icon: Users,
+                color: 'text-green-400',
+                status: 'low',
+              },
+              {
+                label: 'Gates Open',
+                value: `${DEMO_METRICS.gatesOpen}/${DEMO_METRICS.gatesOpen + DEMO_METRICS.gateClosed}`,
+                sub: '2 limited capacity',
+                icon: Shield,
+                color: 'text-cyan-400',
+                status: 'low',
+              },
+              {
+                label: 'Crowd Flow',
+                value: '12.4/min',
+                sub: 'Normal ingress rate',
+                icon: TrendingUp,
+                color: 'text-purple-400',
+                status: 'low',
+              },
             ].map(({ label, value, sub, icon: Icon, color }) => (
               <motion.div
                 key={label}

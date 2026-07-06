@@ -1,12 +1,37 @@
 'use client';
 
-import { Bus, Train, Clock, ArrowRight } from 'lucide-react';
+import { ArrowRight, Bus, Clock, Train } from 'lucide-react';
+
 import { Badge } from '@/components/ui/badge';
 
 const DEPARTURES = [
-  { id: '1', line: 'Metro Line 7', mode: 'metro', destination: 'City Center', time: '21:45', status: 'on_time', crowd: 'low' },
-  { id: '2', line: 'Shuttle A', mode: 'shuttle', destination: 'North Hotels', time: '21:48', status: 'on_time', crowd: 'moderate' },
-  { id: '3', line: 'Bus 42X', mode: 'bus', destination: 'Airport', time: '21:55', status: 'delayed', crowd: 'high' },
+  {
+    id: '1',
+    line: 'Metro Line 7',
+    mode: 'metro',
+    destination: 'City Center',
+    time: '21:45',
+    status: 'on_time',
+    crowd: 'low',
+  },
+  {
+    id: '2',
+    line: 'Shuttle A',
+    mode: 'shuttle',
+    destination: 'North Hotels',
+    time: '21:48',
+    status: 'on_time',
+    crowd: 'moderate',
+  },
+  {
+    id: '3',
+    line: 'Bus 42X',
+    mode: 'bus',
+    destination: 'Airport',
+    time: '21:55',
+    status: 'delayed',
+    crowd: 'high',
+  },
 ];
 
 const STATUS_CONFIG = {
@@ -17,11 +42,11 @@ const STATUS_CONFIG = {
 
 export function TransportStatusCard() {
   return (
-    <section
-      className="glass-card rounded-2xl p-5"
-      aria-labelledby="transport-heading"
-    >
-      <h2 id="transport-heading" className="font-display font-semibold text-foreground flex items-center gap-2 mb-4">
+    <section className="glass-card rounded-2xl p-5" aria-labelledby="transport-heading">
+      <h2
+        id="transport-heading"
+        className="font-display font-semibold text-foreground flex items-center gap-2 mb-4"
+      >
         <Bus className="h-4 w-4 text-green-400" aria-hidden="true" />
         Transport Status
       </h2>
@@ -52,7 +77,9 @@ export function TransportStatusCard() {
                   <Clock className="h-3 w-3 text-muted-foreground" aria-hidden="true" />
                   {dep.time}
                 </p>
-                <Badge className={`text-[10px] px-1.5 py-0 rounded-md border ${status.class} mt-0.5`}>
+                <Badge
+                  className={`text-[10px] px-1.5 py-0 rounded-md border ${status.class} mt-0.5`}
+                >
                   {status.label}
                 </Badge>
               </div>

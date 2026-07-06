@@ -1,20 +1,20 @@
 // =============================================================================
 // AI Service – Orchestrates AI agents with RAG and streaming
 // =============================================================================
-
+import { Content } from '@google/generative-ai';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Response } from 'express';
-import { Content } from '@google/generative-ai';
 import axios from 'axios';
+import { Response } from 'express';
 
-import { GeminiClient } from './clients/gemini.client';
-import { AiGuardrailService } from './guardrails/ai-guardrail.service';
-import { ConversationService } from './conversation.service';
-import { SYSTEM_PROMPTS } from './prompts/system-prompts';
+import type { AiAgentType, AiChatRequest } from '@stadiumiq/shared-types';
+
 import { PrismaService } from '../../database/prisma.service';
 import { RedisService } from '../../redis/redis.service';
-import type { AiChatRequest, AiAgentType } from '@stadiumiq/shared-types';
+import { GeminiClient } from './clients/gemini.client';
+import { ConversationService } from './conversation.service';
+import { AiGuardrailService } from './guardrails/ai-guardrail.service';
+import { SYSTEM_PROMPTS } from './prompts/system-prompts';
 
 @Injectable()
 export class AiService {
@@ -39,7 +39,13 @@ export class AiService {
     // 1. Guardrail check
     const guardrailResult = this.guardrail.evaluate(request.message, userId);
     if (!guardrailResult.isAllowed) {
-      this.logPrompt(userId, request.agentType, request.message, false, guardrailResult.rejectionReason);
+      this.logPrompt(
+        userId,
+        request.agentType,
+        request.message,
+        false,
+        guardrailResult.rejectionReason,
+      );
       res.write(
         `data: ${JSON.stringify({ error: guardrailResult.rejectionReason, isComplete: true })}\n\n`,
       );
@@ -48,8 +54,14 @@ export class AiService {
     }
 
     // 2. Get or create conversation
-    const conversationId = request.conversationId
-      ?? await this.conversationService.createConversation(userId, request.agentType, request.stadiumId, userLanguage);
+    const conversationId =
+      request.conversationId ??
+      (await this.conversationService.createConversation(
+        userId,
+        request.agentType,
+        request.stadiumId,
+        userLanguage,
+      ));
 
     const conversation = await this.conversationService.getConversation(conversationId);
     if (!conversation) throw new NotFoundException('Conversation not found');
@@ -119,14 +131,23 @@ export class AiService {
       await this.conversationService.addMessage(conversationId, 'assistant', fullResponse);
 
       // 10. Log prompt for audit
-      this.logPrompt(userId, request.agentType, request.message, true, undefined, Date.now() - startTime);
+      this.logPrompt(
+        userId,
+        request.agentType,
+        request.message,
+        true,
+        undefined,
+        Date.now() - startTime,
+      );
 
       res.write(
         `data: ${JSON.stringify({ conversationId, messageId, delta: '', isComplete: true })}\n\n`,
       );
     } catch (err) {
       this.logger.error('AI stream error', err);
-      res.write(`data: ${JSON.stringify({ error: 'AI service temporarily unavailable', isComplete: true })}\n\n`);
+      res.write(
+        `data: ${JSON.stringify({ error: 'AI service temporarily unavailable', isComplete: true })}\n\n`,
+      );
     } finally {
       res.end();
     }
@@ -147,17 +168,30 @@ export class AiService {
     return `${basePrompt}${contextSection}`;
   }
 
-  private getBaseSystemPrompt(agentType: AiAgentType, language: string, accessibilityMode: string): string {
+  private getBaseSystemPrompt(
+    agentType: AiAgentType,
+    language: string,
+    accessibilityMode: string,
+  ): string {
     switch (agentType) {
-      case 'stadium_assistant': return SYSTEM_PROMPTS.stadium_assistant(language, 'FIFA World Cup 2026 Venue');
-      case 'crowd_predictor': return SYSTEM_PROMPTS.crowd_predictor();
-      case 'emergency_guide': return SYSTEM_PROMPTS.emergency_guide(language);
-      case 'volunteer_briefer': return SYSTEM_PROMPTS.volunteer_briefer('Volunteer', language);
-      case 'security_analyst': return SYSTEM_PROMPTS.security_analyst();
-      case 'accessibility_concierge': return SYSTEM_PROMPTS.accessibility_concierge(language, accessibilityMode);
-      case 'transport_advisor': return SYSTEM_PROMPTS.transport_advisor(language);
-      case 'sustainability_advisor': return SYSTEM_PROMPTS.sustainability_advisor();
-      default: return SYSTEM_PROMPTS.stadium_assistant(language, 'FIFA World Cup 2026 Venue');
+      case 'stadium_assistant':
+        return SYSTEM_PROMPTS.stadium_assistant(language, 'FIFA World Cup 2026 Venue');
+      case 'crowd_predictor':
+        return SYSTEM_PROMPTS.crowd_predictor();
+      case 'emergency_guide':
+        return SYSTEM_PROMPTS.emergency_guide(language);
+      case 'volunteer_briefer':
+        return SYSTEM_PROMPTS.volunteer_briefer('Volunteer', language);
+      case 'security_analyst':
+        return SYSTEM_PROMPTS.security_analyst();
+      case 'accessibility_concierge':
+        return SYSTEM_PROMPTS.accessibility_concierge(language, accessibilityMode);
+      case 'transport_advisor':
+        return SYSTEM_PROMPTS.transport_advisor(language);
+      case 'sustainability_advisor':
+        return SYSTEM_PROMPTS.sustainability_advisor();
+      default:
+        return SYSTEM_PROMPTS.stadium_assistant(language, 'FIFA World Cup 2026 Venue');
     }
   }
 
@@ -219,12 +253,16 @@ export class AiService {
 
         if (!stadium) return '';
 
-        const alertText = alerts.length > 0
-          ? `Active Alerts: ${alerts.map((a: { severity: string; message: string }) => `${a.severity.toUpperCase()} - ${a.message}`).join('; ')}`
-          : 'No active crowd alerts.';
+        const alertText =
+          alerts.length > 0
+            ? `Active Alerts: ${alerts.map((a: { severity: string; message: string }) => `${a.severity.toUpperCase()} - ${a.message}`).join('; ')}`
+            : 'No active crowd alerts.';
 
         const gateText = gates
-          .map((g: { name: string; status: string; estimatedWaitMinutes: number }) => `${g.name}: ${g.status} (${g.estimatedWaitMinutes}min wait)`)
+          .map(
+            (g: { name: string; status: string; estimatedWaitMinutes: number }) =>
+              `${g.name}: ${g.status} (${g.estimatedWaitMinutes}min wait)`,
+          )
           .join(', ');
 
         return `Stadium: ${stadium.name}\n${alertText}\nGates: ${gateText}`;

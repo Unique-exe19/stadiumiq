@@ -1,10 +1,11 @@
 // =============================================================================
 // Transport Service
 // =============================================================================
-
 import { Injectable } from '@nestjs/common';
-import { RedisService } from '../../redis/redis.service';
+
 import type { TransportDeparture, TransportRecommendation } from '@stadiumiq/shared-types';
+
+import { RedisService } from '../../redis/redis.service';
 
 @Injectable()
 export class TransportService {
@@ -99,7 +100,8 @@ export class TransportService {
 
         return {
           routeOptions,
-          aiRationale: 'Metro Line 7 is recommended because it bypasses major highway bottlenecks and has dedicated accessible boarding ramps available.',
+          aiRationale:
+            'Metro Line 7 is recommended because it bypasses major highway bottlenecks and has dedicated accessible boarding ramps available.',
           bestOption: 0,
           alternativeOptions: [1],
         };

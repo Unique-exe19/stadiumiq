@@ -39,13 +39,29 @@ export interface ApiError {
 }
 
 export type SupportedLanguage =
-  | 'en' | 'ar' | 'fr' | 'es' | 'pt' | 'de'
-  | 'zh' | 'ja' | 'ko' | 'hi' | 'ur' | 'fa'
-  | 'ru' | 'it' | 'nl' | 'pl' | 'tr' | 'sv';
+  | 'en'
+  | 'ar'
+  | 'fr'
+  | 'es'
+  | 'pt'
+  | 'de'
+  | 'zh'
+  | 'ja'
+  | 'ko'
+  | 'hi'
+  | 'ur'
+  | 'fa'
+  | 'ru'
+  | 'it'
+  | 'nl'
+  | 'pl'
+  | 'tr'
+  | 'sv';
 
 export type Theme = 'light' | 'dark' | 'high-contrast';
 
-export type AccessibilityMode = 'standard' | 'mobility-impaired' | 'visual-impaired' | 'hearing-impaired';
+export type AccessibilityMode =
+  'standard' | 'mobility-impaired' | 'visual-impaired' | 'hearing-impaired';
 
 export interface TimestampedEntity {
   readonly createdAt: ISODateString;

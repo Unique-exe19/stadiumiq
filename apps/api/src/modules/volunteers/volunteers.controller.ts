@@ -1,14 +1,15 @@
 // =============================================================================
 // Volunteers Controller
 // =============================================================================
-
-import { Controller, Get, Param, Request, UseGuards, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Param, ParseUUIDPipe, Request, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { VolunteersService } from './volunteers.service';
+
+import type { JwtPayload } from '@stadiumiq/shared-types';
+
+import { RequirePermissions } from '../../common/decorators/permissions.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
-import { RequirePermissions } from '../../common/decorators/permissions.decorator';
-import type { JwtPayload } from '@stadiumiq/shared-types';
+import { VolunteersService } from './volunteers.service';
 
 interface RequestWithUser {
   user: JwtPayload;

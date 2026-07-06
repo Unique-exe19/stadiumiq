@@ -1,6 +1,7 @@
 'use client';
 
 import { Activity, Clock, MapPin, User } from 'lucide-react';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
@@ -51,7 +52,10 @@ export function IncidentsFeed() {
       aria-live="polite"
     >
       <div className="flex items-center justify-between mb-4">
-        <h2 id="incidents-heading" className="font-display font-semibold text-foreground flex items-center gap-2">
+        <h2
+          id="incidents-heading"
+          className="font-display font-semibold text-foreground flex items-center gap-2"
+        >
           <Activity className="h-4 w-4 text-red-400" aria-hidden="true" />
           Active Incidents
         </h2>

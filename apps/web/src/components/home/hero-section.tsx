@@ -1,10 +1,12 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { ArrowRight, Mic, Globe, Shield, Zap } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+
+import { motion } from 'framer-motion';
+import { ArrowRight, Globe, Mic, Shield, Zap } from 'lucide-react';
+
 import { NavigationBar } from '@/components/navigation/navigation-bar';
+import { Button } from '@/components/ui/button';
 
 const FLOATING_STATS = [
   { label: '48 Stadiums', value: '2026' },
@@ -13,12 +15,8 @@ const FLOATING_STATS = [
 ];
 
 export function HeroSection() {
-
   return (
-    <section
-      className="relative min-h-screen flex flex-col"
-      aria-labelledby="hero-heading"
-    >
+    <section className="relative min-h-screen flex flex-col" aria-labelledby="hero-heading">
       <NavigationBar />
 
       {/* Background elements */}
@@ -29,7 +27,8 @@ export function HeroSection() {
         <div
           className="absolute inset-0 opacity-[0.03]"
           style={{
-            backgroundImage: 'linear-gradient(hsl(220 75% 60% / 1) 1px, transparent 1px), linear-gradient(90deg, hsl(220 75% 60% / 1) 1px, transparent 1px)',
+            backgroundImage:
+              'linear-gradient(hsl(220 75% 60% / 1) 1px, transparent 1px), linear-gradient(90deg, hsl(220 75% 60% / 1) 1px, transparent 1px)',
             backgroundSize: '60px 60px',
           }}
         />
@@ -42,9 +41,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-          >
-        
-          </motion.div>
+          ></motion.div>
 
           {/* Heading */}
           <motion.h1
@@ -69,7 +66,8 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             Real-time crowd intelligence, multilingual AI assistance, accessible navigation, and
-            intelligent transport orchestration — all in one platform for 3.5 million World Cup fans.
+            intelligent transport orchestration — all in one platform for 3.5 million World Cup
+            fans.
           </motion.p>
 
           {/* CTAs */}
@@ -139,10 +137,7 @@ export function HeroSection() {
         aria-label="Platform scale statistics"
       >
         {FLOATING_STATS.map(({ label, value }) => (
-          <div
-            key={label}
-            className="glass-card rounded-2xl p-4 text-center"
-          >
+          <div key={label} className="glass-card rounded-2xl p-4 text-center">
             <p className="text-2xl font-display font-bold text-foreground">{value}</p>
             <p className="text-xs text-muted-foreground mt-1">{label}</p>
           </div>

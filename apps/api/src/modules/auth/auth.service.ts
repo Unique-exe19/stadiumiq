@@ -1,23 +1,23 @@
 // =============================================================================
 // Auth Service
 // =============================================================================
-
 import {
-  Injectable,
-  UnauthorizedException,
   ConflictException,
-  Logger,
   ForbiddenException,
+  Injectable,
+  Logger,
+  UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 
+import type { AuthTokens, User } from '@stadiumiq/shared-types';
+import { ROLE_PERMISSIONS } from '@stadiumiq/shared-types';
+
 import { PrismaService } from '../../database/prisma.service';
-import { TokenService } from './token.service';
 import { RedisService } from '../../redis/redis.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import type { AuthTokens, User } from '@stadiumiq/shared-types';
-import { ROLE_PERMISSIONS } from '@stadiumiq/shared-types';
+import { TokenService } from './token.service';
 
 const BCRYPT_ROUNDS = 12;
 
@@ -103,7 +103,13 @@ export class AuthService {
     });
 
     this.logger.log(`User logged in: ${user.id}`);
-    return this.tokenService.generateTokenPair(user.id, user.email, user.role, ipAddress, userAgent);
+    return this.tokenService.generateTokenPair(
+      user.id,
+      user.email,
+      user.role,
+      ipAddress,
+      userAgent,
+    );
   }
 
   async refreshTokens(refreshToken: string): Promise<AuthTokens> {

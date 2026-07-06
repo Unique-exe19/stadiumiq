@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { AlertTriangle, AlertCircle, Info, Clock } from 'lucide-react';
+import { AlertCircle, AlertTriangle, Clock, Info } from 'lucide-react';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
@@ -43,7 +44,10 @@ export function ActiveAlertsCard() {
       aria-atomic="false"
     >
       <div className="flex items-center justify-between mb-4">
-        <h2 id="alerts-heading" className="font-display font-semibold text-foreground flex items-center gap-2">
+        <h2
+          id="alerts-heading"
+          className="font-display font-semibold text-foreground flex items-center gap-2"
+        >
           <AlertTriangle className="h-4 w-4 text-red-400" aria-hidden="true" />
           Active Alerts
         </h2>
@@ -66,7 +70,9 @@ export function ActiveAlertsCard() {
               aria-label={`${config.label} alert: ${alert.message}`}
             >
               <div className="flex items-start gap-3">
-                <div className={`inline-flex p-1.5 rounded-lg ${config.class} flex-shrink-0 mt-0.5`}>
+                <div
+                  className={`inline-flex p-1.5 rounded-lg ${config.class} flex-shrink-0 mt-0.5`}
+                >
                   <SeverityIcon className="h-3.5 w-3.5" aria-hidden="true" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -79,9 +85,7 @@ export function ActiveAlertsCard() {
                   </div>
                   <p className="text-xs text-muted-foreground mb-2">{alert.message}</p>
                   <div className="bg-primary-500/10 border border-primary-500/20 rounded-lg p-2">
-                    <p className="text-xs text-primary-300 font-medium">
-                      🤖 AI: {alert.aiSummary}
-                    </p>
+                    <p className="text-xs text-primary-300 font-medium">🤖 AI: {alert.aiSummary}</p>
                   </div>
                 </div>
               </div>

@@ -1,8 +1,7 @@
 // =============================================================================
 // Crowd Intelligence Types
 // =============================================================================
-
-import type { UUID, GeoPoint, ISODateString } from './common';
+import type { GeoPoint, ISODateString, UUID } from './common';
 import type { OccupancyLevel } from './stadium';
 
 export type CrowdAlertSeverity = 'info' | 'warning' | 'critical' | 'emergency';

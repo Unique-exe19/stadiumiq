@@ -1,7 +1,6 @@
 // =============================================================================
 // Redis Service – Caching, Sessions, Pub/Sub
 // =============================================================================
-
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Redis } from 'ioredis';
@@ -76,11 +75,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     await this.client.publish(channel, JSON.stringify(message));
   }
 
-  async getOrSet<T>(
-    key: string,
-    factory: () => Promise<T>,
-    ttlSeconds: number,
-  ): Promise<T> {
+  async getOrSet<T>(key: string, factory: () => Promise<T>, ttlSeconds: number): Promise<T> {
     const cached = await this.get<T>(key);
     if (cached !== null) return cached;
     const fresh = await factory();

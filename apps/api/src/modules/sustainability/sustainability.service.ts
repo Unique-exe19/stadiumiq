@@ -1,16 +1,15 @@
 // =============================================================================
 // Sustainability Service
 // =============================================================================
-
 import { Injectable } from '@nestjs/common';
-import { RedisService } from '../../redis/redis.service';
+
 import type { SustainabilityMetrics } from '@stadiumiq/shared-types';
+
+import { RedisService } from '../../redis/redis.service';
 
 @Injectable()
 export class SustainabilityService {
-  constructor(
-    private readonly redis: RedisService,
-  ) {}
+  constructor(private readonly redis: RedisService) {}
 
   async getMetrics(stadiumId: string): Promise<SustainabilityMetrics> {
     const cacheKey = `sustainability:${stadiumId}:metrics`;

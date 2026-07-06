@@ -51,19 +51,19 @@ Built on **Google Gemini 1.5 Pro** with **Retrieval-Augmented Generation (RAG)**
 
 Every feature maps directly to the FIFA Smart Stadiums challenge:
 
-| Challenge Area | StadiumIQ Feature |
-|---|---|
-| ✅ Stadium Navigation | AI Navigator with indoor routing, voice guidance |
-| ✅ Crowd Management | Real-time heatmaps, predictive alerts, density monitoring |
-| ✅ Accessibility | WCAG 2.2 AA, audio navigation, wheelchair routing, RTL |
-| ✅ Public Transport | Live departures, AI recommendations, surge management |
-| ✅ Venue Operations | Operations dashboard, incident management, KPI monitoring |
-| ✅ Volunteers | AI briefings, task management, shift scheduling |
-| ✅ Security Teams | Threat intelligence, anomaly detection, incident reporting |
-| ✅ Sustainability | Energy/waste/carbon tracking with AI insights |
-| ✅ Multilingual | 50+ languages, RTL support, real-time AI translation |
-| ✅ AI Decision Support | RAG agents, ReAct reasoning, natural language querying |
-| ✅ Fan Experience | Personalized assistance, transport, navigation, AI chat |
+| Challenge Area         | StadiumIQ Feature                                          |
+| ---------------------- | ---------------------------------------------------------- |
+| ✅ Stadium Navigation  | AI Navigator with indoor routing, voice guidance           |
+| ✅ Crowd Management    | Real-time heatmaps, predictive alerts, density monitoring  |
+| ✅ Accessibility       | WCAG 2.2 AA, audio navigation, wheelchair routing, RTL     |
+| ✅ Public Transport    | Live departures, AI recommendations, surge management      |
+| ✅ Venue Operations    | Operations dashboard, incident management, KPI monitoring  |
+| ✅ Volunteers          | AI briefings, task management, shift scheduling            |
+| ✅ Security Teams      | Threat intelligence, anomaly detection, incident reporting |
+| ✅ Sustainability      | Energy/waste/carbon tracking with AI insights              |
+| ✅ Multilingual        | 50+ languages, RTL support, real-time AI translation       |
+| ✅ AI Decision Support | RAG agents, ReAct reasoning, natural language querying     |
+| ✅ Fan Experience      | Personalized assistance, transport, navigation, AI chat    |
 
 ---
 
@@ -105,6 +105,7 @@ Every feature maps directly to the FIFA Smart Stadiums challenge:
 ## Features
 
 ### 🗺️ AI Stadium Navigator
+
 - Real-time indoor navigation from any point to any seat/facility
 - Crowd-aware pathfinding (avoids congested zones)
 - Voice guidance with audio descriptions
@@ -112,12 +113,14 @@ Every feature maps directly to the FIFA Smart Stadiums challenge:
 - Multi-floor navigation with elevator preferences
 
 ### 👥 Crowd Intelligence Engine
+
 - Live density heatmaps updated every 15 seconds
 - AI-powered crowd prediction (30-min horizon)
 - Automatic critical density alerts
 - Recommended crowd management interventions
 
 ### ♿ Accessibility Concierge
+
 - WCAG 2.2 AA compliant interface
 - RTL language support (Arabic, Hebrew, Urdu, Farsi)
 - High-contrast mode, reduced motion, font scaling
@@ -125,12 +128,14 @@ Every feature maps directly to the FIFA Smart Stadiums challenge:
 - Sign language video resources
 
 ### 🚌 Transport Orchestrator
+
 - Live departure boards for all transit modes
 - AI-recommended departure timing to beat post-match surge
 - Shuttle scheduling optimization
 - Accessible vehicle flagging
 
 ### 🏟️ Venue Operations Dashboard
+
 - 6-metric KPI overview
 - Interactive crowd heatmap
 - Zone occupancy with visual charts
@@ -138,12 +143,14 @@ Every feature maps directly to the FIFA Smart Stadiums challenge:
 - Incident management with AI summaries
 
 ### 🔐 Security Intelligence
+
 - Threat level dashboard (GREEN/AMBER/RED/BLACK)
 - Anomaly detection alerts
 - AI-generated security briefings
 - Incident creation and resolution workflow
 
 ### 🌍 Multilingual AI (50+ Languages)
+
 - Google Gemini 1.5 Pro with per-agent system prompts
 - Auto-language detection
 - RTL layout switching
@@ -153,22 +160,22 @@ Every feature maps directly to the FIFA Smart Stadiums challenge:
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | Next.js 14, TypeScript, Tailwind CSS, ShadCN UI, Framer Motion |
-| Backend | NestJS 10, TypeScript, Prisma ORM |
-| AI Service | FastAPI, Python 3.12, LangChain |
-| Primary LLM | Google Gemini 1.5 Pro |
-| Embeddings | Gemini text-embedding-004 |
-| Vector DB | Qdrant |
-| Database | PostgreSQL 16 |
-| Cache | Redis 7 |
-| Queue | BullMQ |
-| Auth | JWT + Google OAuth (Passport.js) |
-| Monitoring | OpenTelemetry, Prometheus, Grafana |
-| CI/CD | GitHub Actions |
-| Container | Docker + Docker Compose |
-| Deploy | Vercel (Web), GCP Cloud Run (API) |
+| Layer       | Technology                                                     |
+| ----------- | -------------------------------------------------------------- |
+| Frontend    | Next.js 14, TypeScript, Tailwind CSS, ShadCN UI, Framer Motion |
+| Backend     | NestJS 10, TypeScript, Prisma ORM                              |
+| AI Service  | FastAPI, Python 3.12, LangChain                                |
+| Primary LLM | Google Gemini 1.5 Pro                                          |
+| Embeddings  | Gemini text-embedding-004                                      |
+| Vector DB   | Qdrant                                                         |
+| Database    | PostgreSQL 16                                                  |
+| Cache       | Redis 7                                                        |
+| Queue       | BullMQ                                                         |
+| Auth        | JWT + Google OAuth (Passport.js)                               |
+| Monitoring  | OpenTelemetry, Prometheus, Grafana                             |
+| CI/CD       | GitHub Actions                                                 |
+| Container   | Docker + Docker Compose                                        |
+| Deploy      | Vercel (Web), GCP Cloud Run (API)                              |
 
 ---
 
@@ -275,13 +282,13 @@ npm run type-check
 
 ### Test Coverage Targets
 
-| Service | Target |
-|---|---|
-| API (NestJS) | ≥ 85% |
-| AI Service (Python) | ≥ 80% |
-| Frontend (React) | ≥ 80% |
-| E2E Journeys | 5 critical paths |
-| Accessibility | WCAG 2.2 AA |
+| Service             | Target           |
+| ------------------- | ---------------- |
+| API (NestJS)        | ≥ 85%            |
+| AI Service (Python) | ≥ 80%            |
+| Frontend (React)    | ≥ 80%            |
+| E2E Journeys        | 5 critical paths |
+| Accessibility       | WCAG 2.2 AA      |
 
 ---
 
@@ -326,18 +333,18 @@ GET    /api/v1/health
 
 ### OWASP Top 10 Coverage
 
-| Risk | Mitigation |
-|---|---|
-| A01 Broken Access Control | RBAC guards on every protected endpoint |
-| A02 Cryptographic Failures | bcrypt (12 rounds), SHA-256 token hashing |
-| A03 Injection | Parameterized queries (Prisma), Zod/class-validator |
-| A04 Insecure Design | Threat modeling, least privilege |
-| A05 Security Misconfiguration | Helmet, strict CORS, no debug in prod |
-| A06 Vulnerable Components | npm audit in CI, Dependabot |
-| A07 Auth Failures | Token rotation, blacklisting, rate limiting |
-| A08 Data Integrity | CSP, signed tokens, dependency lock files |
-| A09 Logging Failures | Winston structured logging, audit table |
-| A10 SSRF | URL allowlists, no user-supplied URLs to backend |
+| Risk                          | Mitigation                                          |
+| ----------------------------- | --------------------------------------------------- |
+| A01 Broken Access Control     | RBAC guards on every protected endpoint             |
+| A02 Cryptographic Failures    | bcrypt (12 rounds), SHA-256 token hashing           |
+| A03 Injection                 | Parameterized queries (Prisma), Zod/class-validator |
+| A04 Insecure Design           | Threat modeling, least privilege                    |
+| A05 Security Misconfiguration | Helmet, strict CORS, no debug in prod               |
+| A06 Vulnerable Components     | npm audit in CI, Dependabot                         |
+| A07 Auth Failures             | Token rotation, blacklisting, rate limiting         |
+| A08 Data Integrity            | CSP, signed tokens, dependency lock files           |
+| A09 Logging Failures          | Winston structured logging, audit table             |
+| A10 SSRF                      | URL allowlists, no user-supplied URLs to backend    |
 
 ---
 
@@ -388,12 +395,12 @@ cd apps/web && vercel --prod
 
 ## Monitoring
 
-| Tool | Purpose | URL |
-|---|---|---|
-| Grafana | Dashboards | http://localhost:3002 |
-| Prometheus | Metrics | http://localhost:9090 |
-| OpenTelemetry | Distributed tracing | OTLP → Grafana Tempo |
-| Sentry | Error tracking | sentry.io dashboard |
+| Tool          | Purpose             | URL                   |
+| ------------- | ------------------- | --------------------- |
+| Grafana       | Dashboards          | http://localhost:3002 |
+| Prometheus    | Metrics             | http://localhost:9090 |
+| OpenTelemetry | Distributed tracing | OTLP → Grafana Tempo  |
+| Sentry        | Error tracking      | sentry.io dashboard   |
 
 ---
 
@@ -401,15 +408,15 @@ cd apps/web && vercel --prod
 
 Start the dev server (`npm run dev`) and visit:
 
-| Route | Description |
-|---|---|
-| `http://localhost:3000` | Homepage — AI demo, features overview |
-| `http://localhost:3000/auth/login` | Login with demo role buttons (no signup needed) |
-| `http://localhost:3000/fan` | Fan Portal — live crowd heatmap, gate status, seat nav |
-| `http://localhost:3000/staff` | Staff Dashboard — venue KPIs, crowd management |
-| `http://localhost:3000/security` | Security Center — alerts, cameras, dispatch |
-| `http://localhost:3000/volunteers` | Volunteer Hub — tasks, team messages, translation |
-| `http://localhost:3001/api/docs` | Swagger API docs (full interactive spec) |
+| Route                              | Description                                            |
+| ---------------------------------- | ------------------------------------------------------ |
+| `http://localhost:3000`            | Homepage — AI demo, features overview                  |
+| `http://localhost:3000/auth/login` | Login with demo role buttons (no signup needed)        |
+| `http://localhost:3000/fan`        | Fan Portal — live crowd heatmap, gate status, seat nav |
+| `http://localhost:3000/staff`      | Staff Dashboard — venue KPIs, crowd management         |
+| `http://localhost:3000/security`   | Security Center — alerts, cameras, dispatch            |
+| `http://localhost:3000/volunteers` | Volunteer Hub — tasks, team messages, translation      |
+| `http://localhost:3001/api/docs`   | Swagger API docs (full interactive spec)               |
 
 > 💡 **Hackathon Demo Tip**: Open `/auth/login` and click any role card for instant access — no backend signup required.
 
@@ -417,13 +424,13 @@ Start the dev server (`npm run dev`) and visit:
 
 ## Self-Evaluation
 
-| Parameter | Score | Justification |
-|---|---|---|
-| **Code Quality** | 95/100 | TypeScript strict, SOLID principles, DI, ESLint, Prettier, modular monorepo, zero `any` types on critical paths |
-| **Security** | 95/100 | OWASP Top 10 mitigations, JWT rotation, RBAC, prompt injection guards, Helmet CSP, HSTS, audit logging, bcrypt |
-| **Efficiency** | 90/100 | Redis cache-aside (15-30s TTL), SSE streaming for AI, DB connection pooling, `optimizePackageImports`, pagination |
-| **Testing** | 80/100 | Unit tests (auth service, nav bar, fan page), Jest + React Testing Library, NestJS Test module, spec files in place |
-| **Accessibility** | 95/100 | WCAG 2.2 AA, skip nav, ARIA labels, keyboard nav, `prefers-reduced-motion`, RTL, 50+ language support |
+| Parameter             | Score   | Justification                                                                                                                                                                |
+| --------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Code Quality**      | 95/100  | TypeScript strict, SOLID principles, DI, ESLint, Prettier, modular monorepo, zero `any` types on critical paths                                                              |
+| **Security**          | 95/100  | OWASP Top 10 mitigations, JWT rotation, RBAC, prompt injection guards, Helmet CSP, HSTS, audit logging, bcrypt                                                               |
+| **Efficiency**        | 90/100  | Redis cache-aside (15-30s TTL), SSE streaming for AI, DB connection pooling, `optimizePackageImports`, pagination                                                            |
+| **Testing**           | 80/100  | Unit tests (auth service, nav bar, fan page), Jest + React Testing Library, NestJS Test module, spec files in place                                                          |
+| **Accessibility**     | 95/100  | WCAG 2.2 AA, skip nav, ARIA labels, keyboard nav, `prefers-reduced-motion`, RTL, 50+ language support                                                                        |
 | **Problem Alignment** | 100/100 | All 11 FIFA Smart Stadium challenge areas covered: navigation, crowds, accessibility, transport, ops, volunteers, security, sustainability, multilingual, AI, fan experience |
 
 ---

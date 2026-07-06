@@ -1,13 +1,13 @@
 // =============================================================================
 // Roles Guard – RBAC enforcement
 // =============================================================================
-
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
-import { ROLES_KEY } from '../decorators/roles.decorator';
-import { PERMISSIONS_KEY } from '../decorators/permissions.decorator';
 import type { JwtPayload, Permission, UserRole } from '@stadiumiq/shared-types';
+
+import { PERMISSIONS_KEY } from '../decorators/permissions.decorator';
+import { ROLES_KEY } from '../decorators/roles.decorator';
 
 interface RequestWithUser {
   user: JwtPayload;
@@ -33,9 +33,7 @@ export class RolesGuard implements CanActivate {
     const { user } = context.switchToHttp().getRequest<RequestWithUser>();
 
     if (requiredRoles && !requiredRoles.includes(user.role)) {
-      throw new ForbiddenException(
-        `Access denied. Required roles: [${requiredRoles.join(', ')}]`,
-      );
+      throw new ForbiddenException(`Access denied. Required roles: [${requiredRoles.join(', ')}]`);
     }
 
     if (requiredPermissions) {

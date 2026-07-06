@@ -1,30 +1,29 @@
 // =============================================================================
 // App Root Module
 // =============================================================================
-
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { ThrottlerModule } from '@nestjs/throttler';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TerminusModule } from '@nestjs/terminus';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 import { appConfig } from './config/app.config';
 import { DatabaseModule } from './database/database.module';
-import { RedisModule } from './redis/redis.module';
+import { AiModule } from './modules/ai/ai.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CrowdModule } from './modules/crowd/crowd.module';
-import { NavigationModule } from './modules/navigation/navigation.module';
+import { HealthModule } from './modules/health/health.module';
 import { IncidentsModule } from './modules/incidents/incidents.module';
+import { NavigationModule } from './modules/navigation/navigation.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
+import { SecurityModule } from './modules/security/security.module';
+import { StadiumModule } from './modules/stadium/stadium.module';
+import { SustainabilityModule } from './modules/sustainability/sustainability.module';
 import { TransportModule } from './modules/transport/transport.module';
 import { VolunteersModule } from './modules/volunteers/volunteers.module';
-import { SecurityModule } from './modules/security/security.module';
-import { SustainabilityModule } from './modules/sustainability/sustainability.module';
-import { AiModule } from './modules/ai/ai.module';
-import { NotificationsModule } from './modules/notifications/notifications.module';
-import { AnalyticsModule } from './modules/analytics/analytics.module';
-import { HealthModule } from './modules/health/health.module';
-import { StadiumModule } from './modules/stadium/stadium.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [

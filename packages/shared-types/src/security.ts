@@ -1,10 +1,15 @@
 // =============================================================================
 // Security Types
 // =============================================================================
+import type { GeoPoint, ISODateString, UUID } from './common';
 
-import type { UUID, GeoPoint, ISODateString } from './common';
-
-export type SecurityAlertType = 'crowd_anomaly' | 'perimeter_breach' | 'suspicious_behaviour' | 'unauthorized_access' | 'weapon_detection' | 'stampede_risk';
+export type SecurityAlertType =
+  | 'crowd_anomaly'
+  | 'perimeter_breach'
+  | 'suspicious_behaviour'
+  | 'unauthorized_access'
+  | 'weapon_detection'
+  | 'stampede_risk';
 export type SecurityAlertLevel = 'green' | 'amber' | 'red' | 'black';
 
 export interface SecurityAlert {

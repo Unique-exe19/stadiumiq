@@ -1,8 +1,8 @@
 // =============================================================================
 // AI Guardrail Service – Prompt Injection Defense & Content Safety
 // =============================================================================
-
 import { Injectable, Logger } from '@nestjs/common';
+
 import type { PromptGuardrailResult } from '@stadiumiq/shared-types';
 
 // Patterns that indicate prompt injection or policy violations
@@ -24,13 +24,20 @@ const INJECTION_PATTERNS = [
 
 const PII_PATTERNS = [
   /\b\d{3}[-.\s]?\d{2}[-.\s]?\d{4}\b/, // SSN
-  /\b(?:\d{4}[-\s]?){3}\d{4}\b/,        // Credit card
-  /\b[A-Z]{1,2}\d{6,9}\b/,             // Passport
+  /\b(?:\d{4}[-\s]?){3}\d{4}\b/, // Credit card
+  /\b[A-Z]{1,2}\d{6,9}\b/, // Passport
 ];
 
 const OFF_TOPIC_KEYWORDS = [
-  'cryptocurrency', 'stock market', 'adult content', 'drugs',
-  'weapons manufacturing', 'hack', 'exploit', 'malware', 'phishing',
+  'cryptocurrency',
+  'stock market',
+  'adult content',
+  'drugs',
+  'weapons manufacturing',
+  'hack',
+  'exploit',
+  'malware',
+  'phishing',
 ];
 
 @Injectable()

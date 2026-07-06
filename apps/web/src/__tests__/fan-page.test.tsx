@@ -2,9 +2,10 @@
  * Fan Portal Page – Component Tests
  * Uses Vitest + React Testing Library
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
 import React from 'react';
+
+import { render, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // ── Mocks ──────────────────────────────────────────────────────────────────
 vi.mock('next/navigation', () => ({
@@ -13,7 +14,11 @@ vi.mock('next/navigation', () => ({
 }));
 
 vi.mock('next/link', () => ({
-  default: ({ href, children, ...props }: React.PropsWithChildren<{ href: string; [k: string]: unknown }>) =>
+  default: ({
+    href,
+    children,
+    ...props
+  }: React.PropsWithChildren<{ href: string; [k: string]: unknown }>) =>
     React.createElement('a', { href, ...props }, children),
 }));
 

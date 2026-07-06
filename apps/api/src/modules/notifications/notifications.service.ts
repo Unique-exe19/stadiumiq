@@ -1,9 +1,8 @@
 // =============================================================================
 // Notifications Service
 // =============================================================================
-
 import { Injectable, Logger } from '@nestjs/common';
-import { Subject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 export interface NotificationMessage {
@@ -33,9 +32,12 @@ export class NotificationsService {
   subscribeToUser(userId: string): Observable<MessageEvent> {
     return this.notifications$.asObservable().pipe(
       filter((msg) => !msg.userId || msg.userId === userId),
-      map((msg) => ({
-        data: JSON.stringify(msg),
-      } as MessageEvent)),
+      map(
+        (msg) =>
+          ({
+            data: JSON.stringify(msg),
+          }) as MessageEvent,
+      ),
     );
   }
 }

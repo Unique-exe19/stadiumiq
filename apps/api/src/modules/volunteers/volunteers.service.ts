@@ -1,15 +1,16 @@
 // =============================================================================
 // Volunteers Service
 // =============================================================================
-
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../../database/prisma.service';
-import type { VolunteerProfile, VolunteerTask, VolunteerBriefing } from '@stadiumiq/shared-types';
 import type { VolunteerTask as DBVolunteerTask } from '@prisma/client';
+
+import type { VolunteerBriefing, VolunteerProfile, VolunteerTask } from '@stadiumiq/shared-types';
+
+import { PrismaService } from '../../database/prisma.service';
 
 @Injectable()
 export class VolunteersService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async getProfile(userId: string): Promise<VolunteerProfile> {
     const p = await this.prisma.volunteerProfile.findUnique({
@@ -26,7 +27,8 @@ export class VolunteersService {
       displayName: p.user.displayName,
       badgeNumber: p.badgeNumber,
       currentStatus: p.currentStatus as VolunteerProfile['currentStatus'],
-      currentLocation: p.currentLat && p.currentLng ? { lat: p.currentLat, lng: p.currentLng } : undefined,
+      currentLocation:
+        p.currentLat && p.currentLng ? { lat: p.currentLat, lng: p.currentLng } : undefined,
       assignedZone: p.assignedZone ?? undefined,
       languages: p.languages,
       skills: p.skills,

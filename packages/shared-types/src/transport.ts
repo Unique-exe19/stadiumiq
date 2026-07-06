@@ -1,8 +1,7 @@
 // =============================================================================
 // Transport & Transit Types
 // =============================================================================
-
-import type { UUID, GeoPoint, ISODateString } from './common';
+import type { GeoPoint, ISODateString, UUID } from './common';
 
 export type TransportMode = 'metro' | 'bus' | 'shuttle' | 'taxi' | 'bike' | 'walk';
 export type TransportStatus = 'on_time' | 'delayed' | 'cancelled' | 'extra_service' | 'last_trip';

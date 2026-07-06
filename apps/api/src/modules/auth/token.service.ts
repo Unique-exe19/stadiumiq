@@ -1,14 +1,14 @@
 // =============================================================================
 // Token Service – JWT Access & Refresh Token Management
 // =============================================================================
-
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
 
-import { PrismaService } from '../../database/prisma.service';
 import type { AuthTokens, JwtPayload, UserRole } from '@stadiumiq/shared-types';
 import { ROLE_PERMISSIONS } from '@stadiumiq/shared-types';
+
+import { PrismaService } from '../../database/prisma.service';
 
 @Injectable()
 export class TokenService {
@@ -63,10 +63,7 @@ export class TokenService {
   }
 
   async refreshTokens(rawRefreshToken: string): Promise<AuthTokens> {
-    const tokenHash = crypto
-      .createHash('sha256')
-      .update(rawRefreshToken)
-      .digest('hex');
+    const tokenHash = crypto.createHash('sha256').update(rawRefreshToken).digest('hex');
 
     const stored = await this.prisma.refreshToken.findUnique({
       where: { tokenHash },
@@ -91,10 +88,7 @@ export class TokenService {
   }
 
   async revokeRefreshToken(rawRefreshToken: string): Promise<void> {
-    const tokenHash = crypto
-      .createHash('sha256')
-      .update(rawRefreshToken)
-      .digest('hex');
+    const tokenHash = crypto.createHash('sha256').update(rawRefreshToken).digest('hex');
 
     await this.prisma.refreshToken
       .updateMany({ where: { tokenHash }, data: { isRevoked: true } })

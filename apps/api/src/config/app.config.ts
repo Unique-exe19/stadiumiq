@@ -1,7 +1,6 @@
 // =============================================================================
 // Application Configuration
 // =============================================================================
-
 import { registerAs } from '@nestjs/config';
 import { z } from 'zod';
 
@@ -32,9 +31,7 @@ export type AppConfig = z.infer<typeof configSchema>;
 export const appConfig = registerAs('app', () => {
   const parsed = configSchema.safeParse(process.env);
   if (!parsed.success) {
-    const errors = parsed.error.issues
-      .map((i) => `  ${i.path.join('.')}: ${i.message}`)
-      .join('\n');
+    const errors = parsed.error.issues.map((i) => `  ${i.path.join('.')}: ${i.message}`).join('\n');
     throw new Error(`Invalid environment configuration:\n${errors}`);
   }
   return parsed.data;

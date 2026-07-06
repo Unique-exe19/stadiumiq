@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import { StaffDashboardLayout } from '@/components/dashboard/staff-dashboard-layout';
+
 import { DashboardSkeleton } from '@/components/dashboard/dashboard-skeleton';
+import { StaffDashboardLayout } from '@/components/dashboard/staff-dashboard-layout';
 
 export const dynamic = 'force-dynamic';
 

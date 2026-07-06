@@ -1,6 +1,11 @@
 export function DashboardSkeleton() {
   return (
-    <div className="pt-24 px-4 sm:px-6 lg:px-8 pb-8 max-w-[1600px] mx-auto animate-pulse" aria-label="Loading dashboard..." aria-busy="true" role="status">
+    <div
+      className="pt-24 px-4 sm:px-6 lg:px-8 pb-8 max-w-[1600px] mx-auto animate-pulse"
+      aria-label="Loading dashboard..."
+      aria-busy="true"
+      role="status"
+    >
       <div className="h-8 w-64 bg-white/10 rounded-xl mb-2" />
       <div className="h-4 w-40 bg-white/5 rounded-lg mb-6" />
       <div className="grid grid-cols-6 gap-3 mb-6">

@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User, Loader2, Languages } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useCallback, useRef, useState } from 'react';
+
+import { AnimatePresence, motion } from 'framer-motion';
+import { Bot, Languages, Loader2, Send, User } from 'lucide-react';
+
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 interface ChatMessage {
   id: string;
@@ -37,7 +39,8 @@ export function AiDemoSection() {
     {
       id: '0',
       role: 'assistant',
-      content: "Hi! I'm your StadiumIQ AI assistant. Ask me about navigation, transport, crowds, accessibility — anything about the World Cup experience! 🏟️",
+      content:
+        "Hi! I'm your StadiumIQ AI assistant. Ask me about navigation, transport, crowds, accessibility — anything about the World Cup experience! 🏟️",
       timestamp: new Date(),
     },
   ]);
@@ -50,52 +53,60 @@ export function AiDemoSection() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  const sendMessage = useCallback(async (content: string) => {
-    if (!content.trim() || isLoading) return;
+  const sendMessage = useCallback(
+    async (content: string) => {
+      if (!content.trim() || isLoading) return;
 
-    const userMsg: ChatMessage = {
-      id: crypto.randomUUID(),
-      role: 'user',
-      content: content.trim(),
-      timestamp: new Date(),
-    };
+      const userMsg: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: 'user',
+        content: content.trim(),
+        timestamp: new Date(),
+      };
 
-    const assistantMsgId = crypto.randomUUID();
-    const assistantMsg: ChatMessage = {
-      id: assistantMsgId,
-      role: 'assistant',
-      content: '',
-      timestamp: new Date(),
-      isStreaming: true,
-    };
+      const assistantMsgId = crypto.randomUUID();
+      const assistantMsg: ChatMessage = {
+        id: assistantMsgId,
+        role: 'assistant',
+        content: '',
+        timestamp: new Date(),
+        isStreaming: true,
+      };
 
-    setMessages((prev) => [...prev, userMsg, assistantMsg]);
-    setInput('');
-    setIsLoading(true);
+      setMessages((prev) => [...prev, userMsg, assistantMsg]);
+      setInput('');
+      setIsLoading(true);
 
-    // Simulate streaming with demo responses
-    const response = DEMO_RESPONSES[content] ?? 
-      "I can help with navigation, transport schedules, crowd levels, accessibility features, and much more. Try one of the example questions below! 🌟";
+      // Simulate streaming with demo responses
+      const response =
+        DEMO_RESPONSES[content] ??
+        'I can help with navigation, transport schedules, crowd levels, accessibility features, and much more. Try one of the example questions below! 🌟';
 
-    let charIndex = 0;
-    const streamInterval = setInterval(() => {
-      charIndex += 3;
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === assistantMsgId
-            ? { ...m, content: response.slice(0, charIndex), isStreaming: charIndex < response.length }
-            : m,
-        ),
-      );
-      if (charIndex >= response.length) {
-        clearInterval(streamInterval);
-        setIsLoading(false);
-        setTimeout(scrollToBottom, 50);
-      }
-    }, 20);
+      let charIndex = 0;
+      const streamInterval = setInterval(() => {
+        charIndex += 3;
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === assistantMsgId
+              ? {
+                  ...m,
+                  content: response.slice(0, charIndex),
+                  isStreaming: charIndex < response.length,
+                }
+              : m,
+          ),
+        );
+        if (charIndex >= response.length) {
+          clearInterval(streamInterval);
+          setIsLoading(false);
+          setTimeout(scrollToBottom, 50);
+        }
+      }, 20);
 
-    scrollToBottom();
-  }, [isLoading, scrollToBottom]);
+      scrollToBottom();
+    },
+    [isLoading, scrollToBottom],
+  );
 
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
@@ -138,7 +149,8 @@ export function AiDemoSection() {
               Experience the AI Assistant
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Ask anything about the stadium. Our AI speaks 50+ languages and knows every corner of the venue.
+              Ask anything about the stadium. Our AI speaks 50+ languages and knows every corner of
+              the venue.
             </p>
           </motion.div>
         </div>
@@ -212,7 +224,10 @@ export function AiDemoSection() {
                     <div className="whitespace-pre-wrap leading-relaxed">
                       {msg.content}
                       {msg.isStreaming && (
-                        <span className="inline-block w-1 h-4 ml-0.5 bg-primary-400 animate-pulse rounded-sm" aria-label="typing" />
+                        <span
+                          className="inline-block w-1 h-4 ml-0.5 bg-primary-400 animate-pulse rounded-sm"
+                          aria-label="typing"
+                        />
                       )}
                     </div>
                   </div>
@@ -231,7 +246,11 @@ export function AiDemoSection() {
           </div>
 
           {/* Quick prompts */}
-          <div className="px-4 pb-2 flex gap-2 overflow-x-auto scrollbar-thin" role="list" aria-label="Quick question suggestions">
+          <div
+            className="px-4 pb-2 flex gap-2 overflow-x-auto scrollbar-thin"
+            role="list"
+            aria-label="Quick question suggestions"
+          >
             {DEMO_PROMPTS.map((prompt) => (
               <button
                 key={prompt}

@@ -1,14 +1,14 @@
 // =============================================================================
 // Navigation Controller
 // =============================================================================
-
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { NavigationService } from './navigation.service';
+
+import { RequirePermissions } from '../../common/decorators/permissions.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
-import { RequirePermissions } from '../../common/decorators/permissions.decorator';
 import { NavigationRequestDto } from './dto/navigation-request.dto';
+import { NavigationService } from './navigation.service';
 
 @ApiTags('navigation')
 @Controller({ path: 'navigation', version: '1' })

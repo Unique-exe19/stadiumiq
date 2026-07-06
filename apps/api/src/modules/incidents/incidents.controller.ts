@@ -1,15 +1,26 @@
 // =============================================================================
 // Incidents Controller
 // =============================================================================
-
-import { Controller, Get, Post, Put, Body, Param, Request, UseGuards, ParseUUIDPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { IncidentsService } from './incidents.service';
+
+import type { JwtPayload } from '@stadiumiq/shared-types';
+
+import { RequirePermissions } from '../../common/decorators/permissions.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
-import { RequirePermissions } from '../../common/decorators/permissions.decorator';
 import { CreateIncidentDto } from './dto/create-incident.dto';
-import type { JwtPayload } from '@stadiumiq/shared-types';
+import { IncidentsService } from './incidents.service';
 
 interface RequestWithUser {
   user: JwtPayload;

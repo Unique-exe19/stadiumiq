@@ -1,6 +1,16 @@
 'use client';
 
-import { RadialBarChart, RadialBar, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis } from 'recharts';
+import {
+  Bar,
+  BarChart,
+  Cell,
+  RadialBar,
+  RadialBarChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
 const ZONE_DATA = [
   { name: 'North Stand', occupancy: 88, capacity: 20000 },
@@ -27,10 +37,7 @@ interface OccupancyMetricsCardProps {
 
 export function OccupancyMetricsCard({ metrics }: OccupancyMetricsCardProps) {
   return (
-    <section
-      className="glass-card rounded-2xl p-5"
-      aria-labelledby="occupancy-heading"
-    >
+    <section className="glass-card rounded-2xl p-5" aria-labelledby="occupancy-heading">
       <h2 id="occupancy-heading" className="font-display font-semibold text-foreground mb-4">
         Zone Occupancy
       </h2>
@@ -44,7 +51,9 @@ export function OccupancyMetricsCard({ metrics }: OccupancyMetricsCardProps) {
               cy="50%"
               innerRadius="60%"
               outerRadius="90%"
-              data={[{ value: metrics.occupancyPercent, fill: getBarColor(metrics.occupancyPercent) }]}
+              data={[
+                { value: metrics.occupancyPercent, fill: getBarColor(metrics.occupancyPercent) },
+              ]}
               startAngle={180}
               endAngle={0}
             >
@@ -61,24 +70,26 @@ export function OccupancyMetricsCard({ metrics }: OccupancyMetricsCardProps) {
           </p>
           <p
             className={`text-xs font-medium mt-1 ${
-              metrics.occupancyPercent >= 90 ? 'text-red-400' :
-              metrics.occupancyPercent >= 75 ? 'text-orange-400' : 'text-green-400'
+              metrics.occupancyPercent >= 90
+                ? 'text-red-400'
+                : metrics.occupancyPercent >= 75
+                  ? 'text-orange-400'
+                  : 'text-green-400'
             }`}
             role="status"
             aria-label={`Stadium status: ${metrics.occupancyPercent >= 90 ? 'Critical' : metrics.occupancyPercent >= 75 ? 'High' : 'Normal'}`}
           >
-            {metrics.occupancyPercent >= 90 ? '⚠ Critical' :
-             metrics.occupancyPercent >= 75 ? '● High' : '✓ Normal'}
+            {metrics.occupancyPercent >= 90
+              ? '⚠ Critical'
+              : metrics.occupancyPercent >= 75
+                ? '● High'
+                : '✓ Normal'}
           </p>
         </div>
       </div>
 
       {/* Zone breakdown */}
-      <div
-        aria-label="Zone occupancy breakdown"
-        aria-hidden="true"
-        style={{ height: 140 }}
-      >
+      <div aria-label="Zone occupancy breakdown" aria-hidden="true" style={{ height: 140 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={ZONE_DATA} layout="vertical" margin={{ left: 0, right: 16 }}>
             <XAxis type="number" domain={[0, 100]} tick={false} axisLine={false} />

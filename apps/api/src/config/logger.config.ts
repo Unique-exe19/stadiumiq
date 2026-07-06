@@ -1,7 +1,6 @@
 // =============================================================================
 // Winston Logger Configuration
 // =============================================================================
-
 import { WinstonModuleOptions } from 'nest-winston';
 import * as winston from 'winston';
 
@@ -34,10 +33,7 @@ export function createLoggerConfig(): WinstonModuleOptions {
       new winston.transports.File({
         filename: 'logs/error.log',
         level: 'error',
-        format: winston.format.combine(
-          winston.format.timestamp(),
-          winston.format.json(),
-        ),
+        format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
         maxsize: 10 * 1024 * 1024, // 10MB
         maxFiles: 5,
       }),

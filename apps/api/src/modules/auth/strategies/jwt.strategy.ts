@@ -1,15 +1,15 @@
 // =============================================================================
 // JWT Strategy – Passport
 // =============================================================================
-
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { ConfigService } from '@nestjs/config';
+
+import type { JwtPayload } from '@stadiumiq/shared-types';
 
 import { PrismaService } from '../../../database/prisma.service';
 import { RedisService } from '../../../redis/redis.service';
-import type { JwtPayload } from '@stadiumiq/shared-types';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {

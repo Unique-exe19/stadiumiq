@@ -1,13 +1,13 @@
 // =============================================================================
 // Sustainability Controller
 // =============================================================================
-
-import { Controller, Get, Param, UseGuards, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Param, ParseUUIDPipe, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { SustainabilityService } from './sustainability.service';
+
+import { RequirePermissions } from '../../common/decorators/permissions.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
-import { RequirePermissions } from '../../common/decorators/permissions.decorator';
+import { SustainabilityService } from './sustainability.service';
 
 @ApiTags('sustainability')
 @Controller({ path: 'sustainability', version: '1' })

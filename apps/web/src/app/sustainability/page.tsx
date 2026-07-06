@@ -1,12 +1,34 @@
 'use client';
 
+import { Award, BarChart, Leaf, ShieldCheck, Trash2, Zap } from 'lucide-react';
+
 import { NavigationBar } from '@/components/navigation/navigation-bar';
-import { Leaf, Award, BarChart, Zap, Trash2, ShieldCheck } from 'lucide-react';
 
 const METRICS = [
-  { label: 'Energy Savings', value: '18%', desc: 'Relative to baseline match day', icon: Zap, color: 'text-amber-500', bg: 'bg-amber-50' },
-  { label: 'Waste Diverted', value: '82%', desc: 'Recycled/composted today', icon: Trash2, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-  { label: 'Carbon Offset', value: '1.2t', desc: 'Equivalent metric tons CO2', icon: Leaf, color: 'text-blue-500', bg: 'bg-blue-50' },
+  {
+    label: 'Energy Savings',
+    value: '18%',
+    desc: 'Relative to baseline match day',
+    icon: Zap,
+    color: 'text-amber-500',
+    bg: 'bg-amber-50',
+  },
+  {
+    label: 'Waste Diverted',
+    value: '82%',
+    desc: 'Recycled/composted today',
+    icon: Trash2,
+    color: 'text-emerald-500',
+    bg: 'bg-emerald-50',
+  },
+  {
+    label: 'Carbon Offset',
+    value: '1.2t',
+    desc: 'Equivalent metric tons CO2',
+    icon: Leaf,
+    color: 'text-blue-500',
+    bg: 'bg-blue-50',
+  },
 ];
 
 export default function SustainabilityPortalPage() {
@@ -29,11 +51,14 @@ export default function SustainabilityPortalPage() {
         <div className="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl p-6 text-white shadow-card mb-6">
           <div className="flex items-center gap-2 mb-2">
             <Award className="h-5 w-5 text-emerald-200" />
-            <span className="text-xs font-semibold text-emerald-200 uppercase tracking-wider">Milestone Achieved</span>
+            <span className="text-xs font-semibold text-emerald-200 uppercase tracking-wider">
+              Milestone Achieved
+            </span>
           </div>
           <h2 className="text-xl font-bold">Gold Certified Smart Venue</h2>
           <p className="text-xs text-emerald-100 mt-1 max-w-xl">
-            MetLife / SoFi Stadium is currently operating on 94% renewable energy today. Thanks to our AI-optimized HVAC controls, we saved 12MWh of power.
+            MetLife / SoFi Stadium is currently operating on 94% renewable energy today. Thanks to
+            our AI-optimized HVAC controls, we saved 12MWh of power.
           </p>
         </div>
 
@@ -42,7 +67,10 @@ export default function SustainabilityPortalPage() {
           {METRICS.map((m) => {
             const Icon = m.icon;
             return (
-              <div key={m.label} className="bg-white rounded-2xl border border-slate-100 shadow-soft p-5 flex items-start gap-4">
+              <div
+                key={m.label}
+                className="bg-white rounded-2xl border border-slate-100 shadow-soft p-5 flex items-start gap-4"
+              >
                 <div className={`p-3 rounded-xl ${m.color} ${m.bg}`}>
                   <Icon className="h-5 w-5" />
                 </div>
@@ -107,21 +135,27 @@ export default function SustainabilityPortalPage() {
                   <h4 className="text-xs font-semibold text-slate-700">East Concourse Bin Audit</h4>
                   <p className="text-[10px] text-slate-400 mt-0.5">Correct sorting level: 94%</p>
                 </div>
-                <span className="text-[10px] bg-green-50 text-green-600 font-semibold px-2 py-0.5 rounded-full">Pass</span>
+                <span className="text-[10px] bg-green-50 text-green-600 font-semibold px-2 py-0.5 rounded-full">
+                  Pass
+                </span>
               </li>
               <li className="flex items-start justify-between py-2 border-b border-slate-50 last:border-0">
                 <div>
                   <h4 className="text-xs font-semibold text-slate-700">South Stand Recycle Load</h4>
                   <p className="text-[10px] text-slate-400 mt-0.5">Correct sorting level: 88%</p>
                 </div>
-                <span className="text-[10px] bg-green-50 text-green-600 font-semibold px-2 py-0.5 rounded-full">Pass</span>
+                <span className="text-[10px] bg-green-50 text-green-600 font-semibold px-2 py-0.5 rounded-full">
+                  Pass
+                </span>
               </li>
               <li className="flex items-start justify-between py-2 border-b border-slate-50 last:border-0">
                 <div>
                   <h4 className="text-xs font-semibold text-slate-700">West Wing Concourse</h4>
                   <p className="text-[10px] text-slate-400 mt-0.5">Correct sorting level: 75%</p>
                 </div>
-                <span className="text-[10px] bg-amber-50 text-amber-600 font-semibold px-2 py-0.5 rounded-full">Needs Audit</span>
+                <span className="text-[10px] bg-amber-50 text-amber-600 font-semibold px-2 py-0.5 rounded-full">
+                  Needs Audit
+                </span>
               </li>
             </ul>
           </div>

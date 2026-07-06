@@ -1,13 +1,13 @@
 // =============================================================================
 // Audit Interceptor – Logs all state-modifying requests
 // =============================================================================
-
 import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from '@nestjs/common';
-import { Observable, tap } from 'rxjs';
 import { Request } from 'express';
+import { Observable, tap } from 'rxjs';
+
+import type { JwtPayload } from '@stadiumiq/shared-types';
 
 import { PrismaService } from '../../database/prisma.service';
-import type { JwtPayload } from '@stadiumiq/shared-types';
 
 const AUDITED_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 

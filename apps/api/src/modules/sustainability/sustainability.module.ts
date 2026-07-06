@@ -1,8 +1,8 @@
 // =============================================================================
 // Sustainability Module
 // =============================================================================
-
 import { Module } from '@nestjs/common';
+
 import { SustainabilityController } from './sustainability.controller';
 import { SustainabilityService } from './sustainability.service';
 

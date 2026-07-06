@@ -1,8 +1,7 @@
 // =============================================================================
 // Volunteer Management Types
 // =============================================================================
-
-import type { UUID, GeoPoint, ISODateString, TimestampedEntity } from './common';
+import type { GeoPoint, ISODateString, TimestampedEntity, UUID } from './common';
 
 export type VolunteerStatus = 'available' | 'assigned' | 'on_break' | 'off_duty';
 export type TaskStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled';

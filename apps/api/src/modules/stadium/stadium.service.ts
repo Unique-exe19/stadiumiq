@@ -1,12 +1,17 @@
 // =============================================================================
 // Stadium Service
 // =============================================================================
-
 import { Injectable, NotFoundException } from '@nestjs/common';
+import type {
+  Stadium as DBStadium,
+  StadiumGate as DBStadiumGate,
+  StadiumZone as DBStadiumZone,
+} from '@prisma/client';
+
+import type { Stadium, StadiumGate, StadiumZone } from '@stadiumiq/shared-types';
+
 import { PrismaService } from '../../database/prisma.service';
 import { RedisService } from '../../redis/redis.service';
-import type { Stadium, StadiumZone, StadiumGate } from '@stadiumiq/shared-types';
-import type { Stadium as DBStadium, StadiumZone as DBStadiumZone, StadiumGate as DBStadiumGate } from '@prisma/client';
 
 @Injectable()
 export class StadiumService {

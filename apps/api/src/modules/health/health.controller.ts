@@ -1,18 +1,18 @@
 // =============================================================================
 // Health Controller
 // =============================================================================
-
 import { Controller, Get } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  DiskHealthIndicator,
   HealthCheck,
   HealthCheckService,
-  PrismaHealthIndicator,
   MemoryHealthIndicator,
-  DiskHealthIndicator,
+  PrismaHealthIndicator,
 } from '@nestjs/terminus';
-import { RedisHealthIndicator } from './redis.health';
+
 import { PrismaService } from '../../database/prisma.service';
+import { RedisHealthIndicator } from './redis.health';
 
 @ApiTags('health')
 @Controller({ path: 'health', version: '1' })
@@ -48,8 +48,6 @@ export class HealthController {
   @HealthCheck()
   @ApiOperation({ summary: 'Readiness probe (Kubernetes)' })
   readiness() {
-    return this.health.check([
-      () => this.prismaHealth.pingCheck('database', this.prisma),
-    ]);
+    return this.health.check([() => this.prismaHealth.pingCheck('database', this.prisma)]);
   }
 }

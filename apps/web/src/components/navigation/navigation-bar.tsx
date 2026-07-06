@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Globe, Shield, Building2, Users, Map, LogIn, ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+
+import { AnimatePresence, motion } from 'framer-motion';
+import { Building2, ChevronDown, Globe, LogIn, Map, Menu, Shield, Users, X } from 'lucide-react';
 
 const NAV_LINKS = [
   { href: '/fan', label: 'Fan Portal', icon: Map },
@@ -42,10 +43,7 @@ export function NavigationBar() {
   };
 
   return (
-    <header
-      className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 py-3"
-      role="banner"
-    >
+    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 py-3" role="banner">
       <nav
         className="max-w-7xl mx-auto bg-white/80 backdrop-blur-xl rounded-2xl px-5 py-2.5 flex items-center justify-between border border-slate-200/80 shadow-soft"
         aria-label="Main navigation"
@@ -56,7 +54,10 @@ export function NavigationBar() {
           className="flex items-center gap-2.5 focus-visible:ring-2 focus-visible:ring-primary-400 rounded-lg"
           aria-label="StadiumIQ – Go to homepage"
         >
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-sm" aria-hidden="true">
+          <div
+            className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-sm"
+            aria-hidden="true"
+          >
             <Building2 className="h-4 w-4 text-white" />
           </div>
           <span className="font-display font-bold text-slate-800 text-[15px]">
@@ -97,17 +98,17 @@ export function NavigationBar() {
               <Globe className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="text-xs">{activeLang.flag}</span>
               <span className="hidden lg:block text-xs">{activeLang.label}</span>
-              <ChevronDown className={`h-3 w-3 transition-transform ${isLangOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+              <ChevronDown
+                className={`h-3 w-3 transition-transform ${isLangOpen ? 'rotate-180' : ''}`}
+                aria-hidden="true"
+              />
             </button>
 
             <AnimatePresence>
               {isLangOpen && (
                 <>
                   {/* backdrop */}
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setIsLangOpen(false)}
-                  />
+                  <div className="fixed inset-0 z-10" onClick={() => setIsLangOpen(false)} />
                   <motion.ul
                     role="listbox"
                     aria-label="Select language"
@@ -129,7 +130,9 @@ export function NavigationBar() {
                               : 'text-slate-700 hover:bg-slate-50'
                           }`}
                         >
-                          <span className="text-base" aria-hidden="true">{lang.flag}</span>
+                          <span className="text-base" aria-hidden="true">
+                            {lang.flag}
+                          </span>
                           {lang.label}
                           {activeLang.code === lang.code && (
                             <span className="ml-auto text-primary-600 text-xs">✓</span>
@@ -205,7 +208,10 @@ export function NavigationBar() {
                     {LANGUAGES.map((lang) => (
                       <button
                         key={lang.code}
-                        onClick={() => { selectLang(lang); setIsMenuOpen(false); }}
+                        onClick={() => {
+                          selectLang(lang);
+                          setIsMenuOpen(false);
+                        }}
                         className={`flex flex-col items-center py-1.5 rounded-lg text-xs transition-colors ${
                           activeLang.code === lang.code
                             ? 'bg-primary-50 text-primary-700'

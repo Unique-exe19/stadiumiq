@@ -1,8 +1,8 @@
 // =============================================================================
 // Analytics Service
 // =============================================================================
-
 import { Injectable } from '@nestjs/common';
+
 import { PrismaService } from '../../database/prisma.service';
 import { RedisService } from '../../redis/redis.service';
 

@@ -1,9 +1,9 @@
 // =============================================================================
 // AI Chat DTO
 // =============================================================================
-
-import { IsEnum, IsOptional, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEnum, IsOptional, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
+
 import type { AiAgentType, SupportedLanguage } from '@stadiumiq/shared-types';
 
 export class AiChatDto {
@@ -18,8 +18,28 @@ export class AiChatDto {
   @MaxLength(2000)
   message!: string;
 
-  @ApiProperty({ enum: ['stadium_assistant', 'crowd_predictor', 'emergency_guide', 'volunteer_briefer', 'security_analyst', 'accessibility_concierge', 'transport_advisor', 'sustainability_advisor'] })
-  @IsEnum(['stadium_assistant', 'crowd_predictor', 'emergency_guide', 'volunteer_briefer', 'security_analyst', 'accessibility_concierge', 'transport_advisor', 'sustainability_advisor'])
+  @ApiProperty({
+    enum: [
+      'stadium_assistant',
+      'crowd_predictor',
+      'emergency_guide',
+      'volunteer_briefer',
+      'security_analyst',
+      'accessibility_concierge',
+      'transport_advisor',
+      'sustainability_advisor',
+    ],
+  })
+  @IsEnum([
+    'stadium_assistant',
+    'crowd_predictor',
+    'emergency_guide',
+    'volunteer_briefer',
+    'security_analyst',
+    'accessibility_concierge',
+    'transport_advisor',
+    'sustainability_advisor',
+  ])
   agentType!: AiAgentType;
 
   @ApiPropertyOptional({ description: 'Stadium UUID for context' })

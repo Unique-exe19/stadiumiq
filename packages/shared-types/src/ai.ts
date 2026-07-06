@@ -1,13 +1,24 @@
 // =============================================================================
 // AI / GenAI Types
 // =============================================================================
-
-import type { UUID, ISODateString, SupportedLanguage } from './common';
+import type { ISODateString, SupportedLanguage, UUID } from './common';
 
 export type AiRole = 'user' | 'assistant' | 'system';
-export type AiAgentType = 'stadium_assistant' | 'crowd_predictor' | 'emergency_guide' | 'volunteer_briefer' | 'security_analyst' | 'accessibility_concierge' | 'transport_advisor' | 'sustainability_advisor';
+export type AiAgentType =
+  | 'stadium_assistant'
+  | 'crowd_predictor'
+  | 'emergency_guide'
+  | 'volunteer_briefer'
+  | 'security_analyst'
+  | 'accessibility_concierge'
+  | 'transport_advisor'
+  | 'sustainability_advisor';
 
-export type SafetyRating = 'HARM_CATEGORY_HARASSMENT' | 'HARM_CATEGORY_HATE_SPEECH' | 'HARM_CATEGORY_SEXUALLY_EXPLICIT' | 'HARM_CATEGORY_DANGEROUS_CONTENT';
+export type SafetyRating =
+  | 'HARM_CATEGORY_HARASSMENT'
+  | 'HARM_CATEGORY_HATE_SPEECH'
+  | 'HARM_CATEGORY_SEXUALLY_EXPLICIT'
+  | 'HARM_CATEGORY_DANGEROUS_CONTENT';
 
 export interface AiMessage {
   readonly id: UUID;

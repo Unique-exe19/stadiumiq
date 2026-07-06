@@ -1,11 +1,12 @@
 // =============================================================================
 // Security Service
 // =============================================================================
-
 import { Injectable, NotFoundException } from '@nestjs/common';
+
+import type { SecurityAlert, ThreatIntelligence } from '@stadiumiq/shared-types';
+
 import { PrismaService } from '../../database/prisma.service';
 import { RedisService } from '../../redis/redis.service';
-import type { SecurityAlert, ThreatIntelligence } from '@stadiumiq/shared-types';
 
 @Injectable()
 export class SecurityService {
@@ -50,16 +51,18 @@ export class SecurityService {
       cacheKey,
       async () => {
         const activeAlerts = await this.getAlerts(stadiumId);
-        const overallThreatLevel = activeAlerts.some((a) => a.level === 'red' || a.level === 'black') ? 'red' : 'green';
+        const overallThreatLevel = activeAlerts.some(
+          (a) => a.level === 'red' || a.level === 'black',
+        )
+          ? 'red'
+          : 'green';
 
         return {
           stadiumId,
           generatedAt: new Date().toISOString(),
           overallThreatLevel: overallThreatLevel as ThreatIntelligence['overallThreatLevel'],
           activeThreats: activeAlerts,
-          crowdAnomalies: [
-            'East Concourse density increasing 12% faster than expected.',
-          ],
+          crowdAnomalies: ['East Concourse density increasing 12% faster than expected.'],
           aiRecommendations: [
             'Redeploy 3 officers from North Concourse to East Concourse.',
             'Activate Gate E2 auxiliary exit pathway.',

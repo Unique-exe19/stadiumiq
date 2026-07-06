@@ -1,11 +1,11 @@
 // =============================================================================
 // Navigation & Routing Types
 // =============================================================================
-
-import type { UUID, GeoPoint, ISODateString } from './common';
+import type { GeoPoint, ISODateString, UUID } from './common';
 import type { AccessibilityMode } from './common';
 
-export type WaypointType = 'gate' | 'elevator' | 'escalator' | 'ramp' | 'restroom' | 'food' | 'medical' | 'info' | 'seat';
+export type WaypointType =
+  'gate' | 'elevator' | 'escalator' | 'ramp' | 'restroom' | 'food' | 'medical' | 'info' | 'seat';
 
 export type RouteType = 'standard' | 'accessible' | 'fastest' | 'least_crowded' | 'scenic';
 

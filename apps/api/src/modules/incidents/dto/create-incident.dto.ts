@@ -1,11 +1,20 @@
 // =============================================================================
 // Create Incident DTO
 // =============================================================================
-
-import { IsEnum, IsNumber, IsOptional, IsString, IsUUID, MaxLength, MinLength, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import type { IncidentType, IncidentPriority } from '@stadiumiq/shared-types';
+import { Type } from 'class-transformer';
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+  MinLength,
+  ValidateNested,
+} from 'class-validator';
+
+import type { IncidentPriority, IncidentType } from '@stadiumiq/shared-types';
 
 class GeoPointDto {
   @ApiProperty({ example: 40.8135 })
@@ -27,8 +36,34 @@ export class CreateIncidentDto {
   @IsUUID()
   zoneId?: string;
 
-  @ApiProperty({ enum: ['medical', 'security_threat', 'crowd_surge', 'fire', 'structural', 'lost_person', 'suspicious_package', 'vandalism', 'technical_failure', 'weather', 'other'] })
-  @IsEnum(['medical', 'security_threat', 'crowd_surge', 'fire', 'structural', 'lost_person', 'suspicious_package', 'vandalism', 'technical_failure', 'weather', 'other'])
+  @ApiProperty({
+    enum: [
+      'medical',
+      'security_threat',
+      'crowd_surge',
+      'fire',
+      'structural',
+      'lost_person',
+      'suspicious_package',
+      'vandalism',
+      'technical_failure',
+      'weather',
+      'other',
+    ],
+  })
+  @IsEnum([
+    'medical',
+    'security_threat',
+    'crowd_surge',
+    'fire',
+    'structural',
+    'lost_person',
+    'suspicious_package',
+    'vandalism',
+    'technical_failure',
+    'weather',
+    'other',
+  ])
   type!: IncidentType;
 
   @ApiProperty({ enum: ['low', 'medium', 'high', 'critical'] })

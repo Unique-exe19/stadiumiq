@@ -1,9 +1,9 @@
 // =============================================================================
 // Redis Module
 // =============================================================================
-
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+
 import { RedisService } from './redis.service';
 
 @Global()

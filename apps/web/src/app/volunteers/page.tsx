@@ -1,9 +1,18 @@
 import type { Metadata } from 'next';
-import { NavigationBar } from '@/components/navigation/navigation-bar';
+
 import {
-  Users, CheckCircle2, Circle, Clock, MapPin,
-  MessageSquare, Languages, Star, Zap
+  CheckCircle2,
+  Circle,
+  Clock,
+  Languages,
+  MapPin,
+  MessageSquare,
+  Star,
+  Users,
+  Zap,
 } from 'lucide-react';
+
+import { NavigationBar } from '@/components/navigation/navigation-bar';
 
 export const metadata: Metadata = {
   title: 'Volunteers Portal – StadiumIQ',
@@ -11,17 +20,59 @@ export const metadata: Metadata = {
 };
 
 const TASKS = [
-  { id: 1, task: 'Guide fans from Gate A to Section 10–20', zone: 'Gate A', priority: 'high', done: false },
-  { id: 2, task: 'Assist wheelchair users to accessible seating', zone: 'Concourse B', priority: 'high', done: false },
-  { id: 3, task: 'Hand out stadium maps at Gate C', zone: 'Gate C', priority: 'normal', done: true },
-  { id: 4, task: 'Report any blocked emergency exits', zone: 'All areas', priority: 'high', done: true },
-  { id: 5, task: 'Multilingual help at main info desk', zone: 'Main Lobby', priority: 'normal', done: false },
+  {
+    id: 1,
+    task: 'Guide fans from Gate A to Section 10–20',
+    zone: 'Gate A',
+    priority: 'high',
+    done: false,
+  },
+  {
+    id: 2,
+    task: 'Assist wheelchair users to accessible seating',
+    zone: 'Concourse B',
+    priority: 'high',
+    done: false,
+  },
+  {
+    id: 3,
+    task: 'Hand out stadium maps at Gate C',
+    zone: 'Gate C',
+    priority: 'normal',
+    done: true,
+  },
+  {
+    id: 4,
+    task: 'Report any blocked emergency exits',
+    zone: 'All areas',
+    priority: 'high',
+    done: true,
+  },
+  {
+    id: 5,
+    task: 'Multilingual help at main info desk',
+    zone: 'Main Lobby',
+    priority: 'normal',
+    done: false,
+  },
 ];
 
 const MESSAGES = [
-  { from: 'HQ', time: '10 min ago', text: 'Please move to Concourse B — fan surge expected at 19:00.' },
-  { from: 'Team Lead Maria', time: '25 min ago', text: 'Great job everyone! Crowd flow much better than last match.' },
-  { from: 'HQ', time: '1h ago', text: 'Reminder: Arabic translation support needed at info desk until 20:00.' },
+  {
+    from: 'HQ',
+    time: '10 min ago',
+    text: 'Please move to Concourse B — fan surge expected at 19:00.',
+  },
+  {
+    from: 'Team Lead Maria',
+    time: '25 min ago',
+    text: 'Great job everyone! Crowd flow much better than last match.',
+  },
+  {
+    from: 'HQ',
+    time: '1h ago',
+    text: 'Reminder: Arabic translation support needed at info desk until 20:00.',
+  },
 ];
 
 const LANGUAGES = ['English', 'Spanish', 'Arabic', 'French', 'Portuguese', 'German'];
@@ -60,7 +111,7 @@ export default function VolunteersPage() {
               <div className="font-display font-bold text-lg">Jordan S.</div>
               <div className="text-primary-200 text-sm">Zone Lead · Gate A &amp; B</div>
               <div className="flex items-center gap-1 mt-1">
-                {Array.from({length: 5}).map((_, i) => (
+                {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} className="h-3 w-3 fill-accent-300 text-accent-300" />
                 ))}
                 <span className="text-xs text-primary-200 ml-1">5.0 rating</span>
@@ -83,12 +134,13 @@ export default function VolunteersPage() {
                   Today's Assignments
                 </h2>
                 <span className="text-xs text-slate-400">
-                  {TASKS.filter(t => t.done).length}/{TASKS.length} done
+                  {TASKS.filter((t) => t.done).length}/{TASKS.length} done
                 </span>
               </div>
               <ul className="space-y-2.5" role="list" aria-label="Today's volunteer assignments">
                 {TASKS.map((t) => (
-                  <li key={t.id}
+                  <li
+                    key={t.id}
                     className={`flex items-start gap-3 p-3 rounded-xl border transition-colors ${
                       t.done
                         ? 'bg-slate-50 border-slate-100'
@@ -97,12 +149,21 @@ export default function VolunteersPage() {
                           : 'bg-white border-slate-100'
                     }`}
                   >
-                    {t.done
-                      ? <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
-                      : <Circle className="h-5 w-5 text-slate-300 flex-shrink-0 mt-0.5" aria-hidden="true" />
-                    }
+                    {t.done ? (
+                      <CheckCircle2
+                        className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <Circle
+                        className="h-5 w-5 text-slate-300 flex-shrink-0 mt-0.5"
+                        aria-hidden="true"
+                      />
+                    )}
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-medium ${t.done ? 'line-through text-slate-400' : 'text-slate-800'}`}>
+                      <p
+                        className={`text-sm font-medium ${t.done ? 'line-through text-slate-400' : 'text-slate-800'}`}
+                      >
                         {t.task}
                       </p>
                       <div className="flex items-center gap-3 mt-1">
@@ -110,7 +171,9 @@ export default function VolunteersPage() {
                           <MapPin className="h-3 w-3" /> {t.zone}
                         </span>
                         {t.priority === 'high' && !t.done && (
-                          <span className="text-xs font-semibold text-orange-600 bg-orange-100 px-1.5 py-0.5 rounded-full">Priority</span>
+                          <span className="text-xs font-semibold text-orange-600 bg-orange-100 px-1.5 py-0.5 rounded-full">
+                            Priority
+                          </span>
                         )}
                       </div>
                     </div>
@@ -127,14 +190,20 @@ export default function VolunteersPage() {
               </h2>
               <ul className="space-y-3" role="list">
                 {MESSAGES.map((msg, i) => (
-                  <li key={i} className="flex gap-3 pb-3 border-b border-slate-50 last:border-0 last:pb-0">
+                  <li
+                    key={i}
+                    className="flex gap-3 pb-3 border-b border-slate-50 last:border-0 last:pb-0"
+                  >
                     <div className="w-8 h-8 rounded-xl bg-primary-100 text-primary-700 flex items-center justify-center text-xs font-bold flex-shrink-0">
                       {msg.from === 'HQ' ? 'HQ' : (msg.from.split(' ')[1]?.[0] ?? msg.from[0])}
                     </div>
                     <div>
                       <div className="flex items-center gap-2 mb-0.5">
                         <span className="text-xs font-semibold text-slate-800">{msg.from}</span>
-                        <span className="text-xs text-slate-400 flex items-center gap-1"><Clock className="h-3 w-3" />{msg.time}</span>
+                        <span className="text-xs text-slate-400 flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {msg.time}
+                        </span>
                       </div>
                       <p className="text-sm text-slate-600">{msg.text}</p>
                     </div>
@@ -155,7 +224,10 @@ export default function VolunteersPage() {
               <p className="text-xs text-slate-500 mb-3">Your active languages:</p>
               <div className="flex flex-wrap gap-1.5 mb-4">
                 {LANGUAGES.map((lang) => (
-                  <span key={lang} className="px-2.5 py-1 rounded-full text-xs font-medium bg-violet-50 text-violet-700 border border-violet-100">
+                  <span
+                    key={lang}
+                    className="px-2.5 py-1 rounded-full text-xs font-medium bg-violet-50 text-violet-700 border border-violet-100"
+                  >
                     {lang}
                   </span>
                 ))}

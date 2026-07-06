@@ -1,8 +1,7 @@
 // =============================================================================
 // Fan Experience Types
 // =============================================================================
-
-import type { UUID, ISODateString, GeoPoint, SupportedLanguage, AccessibilityMode } from './common';
+import type { AccessibilityMode, GeoPoint, ISODateString, SupportedLanguage, UUID } from './common';
 
 export interface FanPreferences {
   readonly userId: UUID;

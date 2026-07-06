@@ -1,9 +1,9 @@
 // =============================================================================
 // Navigation Service
 // =============================================================================
-
 import { Injectable } from '@nestjs/common';
-import type { Route, NavigationRequest, Waypoint } from '@stadiumiq/shared-types';
+
+import type { NavigationRequest, Route, Waypoint } from '@stadiumiq/shared-types';
 
 @Injectable()
 export class NavigationService {
@@ -39,7 +39,7 @@ export class NavigationService {
     const polyline = [
       fromWaypoint.location,
       { lat: 40.8138, lng: -74.0742 },
-      { lat: 40.8140, lng: -74.0740 },
+      { lat: 40.814, lng: -74.074 },
       toWaypoint.location,
     ];
 
@@ -54,16 +54,21 @@ export class NavigationService {
       },
       {
         stepNumber: 2,
-        instruction: req.accessibilityMode === 'mobility-impaired'
-          ? 'Turn left and take Elevator 3 to Level 2.'
-          : 'Turn left and take Escalator 2 to Level 2.',
+        instruction:
+          req.accessibilityMode === 'mobility-impaired'
+            ? 'Turn left and take Elevator 3 to Level 2.'
+            : 'Turn left and take Escalator 2 to Level 2.',
         distanceMeters: 30,
         landmark: 'Elevator/Escalator Bank East',
         floor: 1,
-        accessibilityNote: req.accessibilityMode === 'mobility-impaired' ? 'Elevator equipped with Braille and audio announcements.' : undefined,
-        audioDescription: req.accessibilityMode === 'mobility-impaired'
-          ? 'Take Elevator 3 on your left up one level.'
-          : 'Take Escalator 2 on your left up one level.',
+        accessibilityNote:
+          req.accessibilityMode === 'mobility-impaired'
+            ? 'Elevator equipped with Braille and audio announcements.'
+            : undefined,
+        audioDescription:
+          req.accessibilityMode === 'mobility-impaired'
+            ? 'Take Elevator 3 on your left up one level.'
+            : 'Take Escalator 2 on your left up one level.',
       },
       {
         stepNumber: 3,
@@ -71,7 +76,8 @@ export class NavigationService {
         distanceMeters: 40,
         landmark: 'Food Stand: World Cup Eats',
         floor: 2,
-        audioDescription: 'Walk down the corridor. Section 204 is on the right, past World Cup Eats.',
+        audioDescription:
+          'Walk down the corridor. Section 204 is on the right, past World Cup Eats.',
       },
     ];
 

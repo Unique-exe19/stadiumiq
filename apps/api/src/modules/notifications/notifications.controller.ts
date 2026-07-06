@@ -1,13 +1,14 @@
 // =============================================================================
 // Notifications Controller
 // =============================================================================
-
-import { Controller, Sse, MessageEvent, Request, UseGuards } from '@nestjs/common';
+import { Controller, MessageEvent, Request, Sse, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Observable } from 'rxjs';
-import { NotificationsService } from './notifications.service';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+
 import type { JwtPayload } from '@stadiumiq/shared-types';
+
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { NotificationsService } from './notifications.service';
 
 interface RequestWithUser {
   user: JwtPayload;
