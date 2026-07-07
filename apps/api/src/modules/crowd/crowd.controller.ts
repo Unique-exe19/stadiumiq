@@ -9,6 +9,7 @@ import { RequirePermissions } from '../../common/decorators/permissions.decorato
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { CrowdService } from './crowd.service';
+import { UpdateOccupancyDto } from './dto/update-occupancy.dto';
 
 @ApiTags('crowd')
 @Controller({ path: 'crowd', version: '1' })
@@ -44,9 +45,9 @@ export class CrowdController {
   @ApiOperation({ summary: 'Update zone occupancy reading (sensor data ingestion)' })
   async updateOccupancy(
     @Param('zoneId', ParseUUIDPipe) zoneId: string,
-    @Body('currentOccupancy') currentOccupancy: number,
+    @Body() dto: UpdateOccupancyDto,
   ) {
-    await this.crowdService.updateZoneOccupancy(zoneId, currentOccupancy);
+    await this.crowdService.updateZoneOccupancy(zoneId, dto.currentOccupancy);
     return { updated: true };
   }
 }
