@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "postinstall": "prisma generate",
+    "prebuild": "prisma generate",
+    "pretype-check": "prisma generate",
     "build": "nest build",
     "dev": "nest start --watch",
     "start:dev": "nest start --watch",

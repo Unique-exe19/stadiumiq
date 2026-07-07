@@ -65,7 +65,7 @@ export function AiInsightsPanel() {
           variant="ghost"
           size="icon"
           className="w-7 h-7 rounded-lg"
-          onClick={handleGenerate}
+          onClick={() => { void handleGenerate(); }}
           disabled={isGenerating}
           aria-label="Regenerate AI insights"
         >

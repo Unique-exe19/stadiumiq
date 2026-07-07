@@ -59,7 +59,7 @@ export function StaffDashboardLayout() {
             <Button
               variant="outline"
               size="sm"
-              onClick={handleRefresh}
+              onClick={() => { void handleRefresh(); }}
               disabled={isRefreshing}
               className="border-white/15 text-muted-foreground hover:text-foreground rounded-xl"
               aria-label="Refresh dashboard data"

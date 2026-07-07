@@ -2,11 +2,9 @@
 # AI Service Tests – Guardrail and RAG
 # =============================================================================
 
-import pytest
 from src.middleware.api_key import APIKeyMiddleware
 from fastapi.testclient import TestClient
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
 
 
 # ---------------------------------------------------------------------------
